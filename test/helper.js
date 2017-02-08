@@ -45,7 +45,7 @@ describe("helper", () => {
             assert.equal(isEqual(b1, b2), false);
         });
 
-        it("different equal", () => {
+        it("equal", () => {
             const b1 = new Uint8Array([1,2,3]);
             const b2 = new Uint8Array([1,2,3]);
 

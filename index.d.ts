@@ -1,5 +1,5 @@
 
-declare namespace TSTool {
+declare namespace pvtsutils {
     function assign(target: any, ...sources: any[]): any;
     function combine(...buf: ArrayBuffer[]): ArrayBuffer;
     function isEqual(bytes1: ArrayBuffer, bytes2: ArrayBuffer): boolean;
@@ -22,5 +22,5 @@ declare namespace TSTool {
     }
 }
 
-export = TSTool;
+export = pvtsutils;
 export as namespace TSTool;

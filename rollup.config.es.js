@@ -7,7 +7,7 @@ let banner = []
 export default {
     entry: "src/index.ts",
     plugins: [
-        typescript({ typescript: require("typescript"), target: "es2015", removeComments: true }),
+        typescript({ typescript: require("typescript"), target: "es5", removeComments: true }),
     ],
     banner: banner.join("\n"),
     external: ["tslib"],

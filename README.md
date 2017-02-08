@@ -13,6 +13,8 @@ npm install pvtsutils
 const utils = require("pvtsutils");
 ```
 
+The `pvtsutils` namespace will always be available globally and also supports AMD loaders.
+
 ## Types
 
 There is an [index.d.ts](./index.d.ts) file which makes easy to use current module as external

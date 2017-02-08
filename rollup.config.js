@@ -18,7 +18,7 @@ export default {
         {
             dest: pkg.main,
             format: "cjs",
-            moduleName: "TSTool"
+            moduleName: "pvtsutils"
         }
     ]
 };

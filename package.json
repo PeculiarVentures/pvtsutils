@@ -44,6 +44,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.39",
     "coveralls": "^2",
+    "mocha": "^3.2.0",
     "nyc": "^10",
     "rollup": "^0.41.4",
     "rollup-plugin-typescript": "^0.8.1",

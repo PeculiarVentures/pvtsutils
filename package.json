@@ -1,0 +1,52 @@
+{
+  "name": "pvtsutils",
+  "version": "1.0.0",
+  "description": "pvtsutils is a set of common utility functions used in various Peculiar Ventures TypeScript based projects.",
+  "main": "dist/tspvutils.js",
+  "module": "dist/tspvutils.es.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "mocha test/**/*.js",
+    "build": "npm run build:dist",
+    "build:es5": "rollup -c",
+    "build:map": "rollup -c -m",
+    "build:es2015": "rollup -c rollup.config.es.js",
+    "build:dist": "npm run build:es5 && npm run build:es2015",
+    "prepublish": "npm run build",
+    "pub": "npm version patch && npm publish && git push",
+    "precoverage": "npm run build:map",
+    "coverage": "nyc npm test",
+    "precoveragehtml": "npm run coverage",
+    "coveragehtml": "nyc report -r html",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "keywords": [
+    "typescript",
+    "helper",
+    "util",
+    "convert",
+    "hex",
+    "utf8",
+    "base64",
+    "base64url",
+    "binary",
+    "assign"
+  ],
+  "author": "PeculiarVentures",
+  "contributors": [
+    "Miroshin Stepan<microshine@mail.ru>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^7.0.5",
+    "tslib": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.39",
+    "coveralls": "^2",
+    "nyc": "^10",
+    "rollup": "^0.41.4",
+    "rollup-plugin-typescript": "^0.8.1",
+    "typescript": "^2.1.5"
+  }
+}

@@ -1,0 +1,10 @@
+.vscode
+.nyc_output
+coverage
+node_modules
+out
+src
+dist/*.map
+rollup.*.js
+ts*.json
+circle.yml

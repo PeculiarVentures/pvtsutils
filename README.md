@@ -3,8 +3,8 @@ pvtsutils is a set of common utility functions used in various Peculiar Ventures
 
 Some example capabilities included in pvtsutils include:
 
-- Converting values to an from hex,
-- Converting values to and base64,
+- Converting values to adn from hex,
+- Converting values to and from base64,
 - Working with base64 url,
 - Working with binary data.
 - And more...

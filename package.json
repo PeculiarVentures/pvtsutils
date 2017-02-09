@@ -37,6 +37,14 @@
     "Miroshin Stepan<microshine@mail.ru>"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeculiarVentures/pvtsutils"
+  },
+    "bugs": {
+    "url": "https://github.com/PeculiarVentures/pvtsutils/issues"
+  },
+  "homepage": "https://github.com/PeculiarVentures/pvtsutils#readme",
   "dependencies": {
     "@types/node": "^7.0.5",
     "tslib": "^1.5.0"

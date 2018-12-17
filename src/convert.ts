@@ -53,7 +53,7 @@ export class Convert {
             const binary = this.ToString(buf, "binary");
             return btoa(binary);
         } else {
-            return new Buffer(buf).toString("base64");
+            return Buffer.from(buf).toString("base64");
         }
     }
 
@@ -62,7 +62,7 @@ export class Convert {
         if (typeof atob !== "undefined") {
             return this.FromBinary(atob(base64Text));
         } else {
-            return new Uint8Array(new Buffer(base64Text, "base64")).buffer;
+            return new Uint8Array(Buffer.from(base64Text, "base64")).buffer;
         }
     }
 
@@ -127,11 +127,11 @@ export class Convert {
 
     /**
      * Converts HEX string to buffer
-     * 
+     *
      * @static
      * @param {string} hexString
      * @returns {Uint8Array}
-     * 
+     *
      * @memberOf Convert
      */
     public static FromHex(hexString: string) {

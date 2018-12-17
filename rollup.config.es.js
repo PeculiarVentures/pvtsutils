@@ -5,19 +5,19 @@ let pkg = require("./package.json");
 let banner = []
 
 export default {
-    entry: "src/index.ts",
+    input: "src/index.ts",
     plugins: [
         typescript({ typescript: require("typescript"), target: "es5", removeComments: true }),
     ],
-    banner: banner.join("\n"),
     external: ["tslib"],
-    globals: {
-        tslib: "tslib",
-    },
-    targets: [
+    output: [
         {
-            dest: pkg.module,
+            banner: banner.join("\n"),
+            file: pkg.module,
             format: "es",
+            globals: {
+                tslib: "tslib",
+            },
         }
     ]
 };

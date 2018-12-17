@@ -46,16 +46,16 @@
   },
   "homepage": "https://github.com/PeculiarVentures/pvtsutils#readme",
   "dependencies": {
-    "@types/node": "^7.0.5",
-    "tslib": "^1.5.0"
+    "@types/node": "^10.12.15",
+    "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.39",
-    "coveralls": "^2",
-    "mocha": "^3.2.0",
-    "nyc": "^10",
-    "rollup": "^0.41.4",
-    "rollup-plugin-typescript": "^0.8.1",
-    "typescript": "^2.1.5"
+    "@types/mocha": "^5.2.5",
+    "coveralls": "^3.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "rollup": "^0.68.0",
+    "rollup-plugin-typescript": "^1.0.0",
+    "typescript": "^3.2.2"
   }
 }

@@ -1,10 +1,15 @@
+# Dev
+.circleci
 .vscode
 .nyc_output
 coverage
-node_modules
-out
+
+# Source
 src
-dist/*.map
+
+# Tests
+test
+
+# Config files
 rollup.*.js
 ts*.json
-circle.yml

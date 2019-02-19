@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { assign, combine, isEqual } from "../";
+import { assign, combine, isEqual } from "../src";
 
 describe("helper", () => {
 

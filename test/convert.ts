@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { Convert, isEqual } from "../";
+import { Convert, isEqual } from "../src";
 
 describe("Convert", () => {
 

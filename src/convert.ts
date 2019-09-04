@@ -4,10 +4,12 @@ declare const unescape: (value: string) => string;
 declare const escape: (value: string) => string;
 
 function PrepareBuffer(buffer: BufferSource) {
-    if (typeof Buffer !== "undefined") {
-        return new Uint8Array(buffer as any);
+    if (typeof Buffer !== "undefined" && Buffer.isBuffer(buffer)) {
+        return new Uint8Array(buffer);
+    } else if (ArrayBuffer.isView(buffer)) {
+        return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     } else {
-        return new Uint8Array(buffer instanceof ArrayBuffer ? buffer : buffer.buffer);
+        return new Uint8Array(buffer);
     }
 }
 

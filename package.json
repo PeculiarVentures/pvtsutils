@@ -50,11 +50,11 @@
   },
   "homepage": "https://github.com/PeculiarVentures/pvtsutils#readme",
   "dependencies": {
-    "@types/node": "^10.17.9",
     "tslib": "^1.10.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.18",
     "coveralls": "^3.0.9",
     "mocha": "^6.2.2",
     "nyc": "^14.1.1",

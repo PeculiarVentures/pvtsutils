@@ -14,8 +14,8 @@ export function combine(...buf: ArrayBuffer[]) {
     const res = new Uint8Array(totalByteLength);
     let currentPos = 0;
     buf.map((item) => new Uint8Array(item)).forEach((arr) => {
-        for (let i = 0; i < arr.length; i++) {
-            res[currentPos++] = arr[i];
+        for (const item2 of arr) {
+            res[currentPos++] = item2;
         }
     });
     return res.buffer;

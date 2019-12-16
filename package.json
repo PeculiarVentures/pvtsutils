@@ -2,15 +2,25 @@
   "name": "pvtsutils",
   "version": "1.0.6",
   "description": "pvtsutils is a set of common utility functions used in various Peculiar Ventures TypeScript based projects.",
-  "main": "dist/pvtsutils.js",
-  "module": "dist/pvtsutils.es.js",
-  "types": "index.d.ts",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "types": "build/types/index.d.ts",
   "scripts": {
     "prepare": "npm run build",
     "test": "mocha",
-    "build": "rollup -c",
-    "prepub": "npm run build",
-    "pub": "npm version patch && npm publish && git push",
+    "build": "npm run build:module && npm run build:types",
+    "clear": "rimraf build/*",
+    "rebuild": "npm run clear && npm run build",
+    "build:module": "rollup -c",
+    "build:types": "tsc -p tsconfig.types.json",
+    "lint": "tslint -p .",
+    "lint:fix": "tslint --fix -p .",
+    "prepub": "npm run lint && npm run rebuild",
+    "pub": "npm version patch && npm publish",
+    "postpub": "git push && git push --tags origin master",
+    "prepub:next": "npm run lint && npm run rebuild",
+    "pub:next": "npm version prerelease --preid=next && npm publish --tag next",
+    "postpub:next": "git push",
     "coverage": "nyc npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -40,18 +50,19 @@
   },
   "homepage": "https://github.com/PeculiarVentures/pvtsutils#readme",
   "dependencies": {
-    "@types/node": "^10.14.17",
+    "@types/node": "^10.17.9",
     "tslib": "^1.10.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "coveralls": "^3.0.6",
-    "mocha": "^6.2.0",
+    "coveralls": "^3.0.9",
+    "mocha": "^6.2.2",
     "nyc": "^14.1.1",
-    "rollup": "^1.20.3",
-    "rollup-plugin-typescript": "^1.0.1",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.6.2"
+    "rimraf": "^3.0.0",
+    "rollup": "^1.27.13",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
   },
   "nyc": {
     "extension": [

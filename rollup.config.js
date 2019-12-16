@@ -1,42 +1,47 @@
-import typescript from "rollup-plugin-typescript";
+import typescript from "rollup-plugin-typescript2";
 
 let pkg = require("./package.json");
 
-let banner = []
-
+const banner = [
+  "/**",
+  " * Copyright (c) 2019, Peculiar Ventures, All rights reserved.",
+  " */",
+  "",
+].join("\n");
+const input = "src/index.ts";
 const external = Object.keys(pkg.dependencies);
 
 export default [
   {
-    input: "src/index.ts",
+    input,
     plugins: [
-      typescript({ typescript: require("typescript"), target: "esnext", removeComments: true }),
+      typescript({
+        check: true,
+        clean: true,
+        tsconfigOverride: {
+          compilerOptions: {
+            removeComments: true,
+            module: "ES2015",
+          }
+        }
+      }),
     ],
     external,
     output: [
       {
-        banner: banner.join("\n"),
+        banner,
         file: pkg.main,
         format: "umd",
         globals: {
           tslib: "tslib",
         },
         name: "pvtsutils"
+      },
+      {
+        banner,
+        file: pkg.module,
+        format: "esm",
       }
     ]
   },
-  {
-    input: "src/index.ts",
-    plugins: [
-      typescript({ typescript: require("typescript"), target: "esnext", removeComments: true }),
-    ],
-    external,
-    output: [
-      {
-        banner: banner.join("\n"),
-        file: pkg.module,
-        format: "es",
-      }
-    ]
-  }
 ];

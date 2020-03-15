@@ -32,7 +32,7 @@ export class Convert {
                 throw new Error(`Unknown type of encoding '${enc}'`);
         }
     }
-    public static FromString(str: string, enc: BufferEncoding = "utf8") : ArrayBuffer {
+    public static FromString(str: string, enc: BufferEncoding = "utf8"): ArrayBuffer {
         switch (enc.toLowerCase()) {
             case "utf8":
                 return this.FromUtf8String(str);
@@ -59,7 +59,7 @@ export class Convert {
         }
     }
 
-    public static FromBase64(base64Text: string) : ArrayBuffer{
+    public static FromBase64(base64Text: string): ArrayBuffer {
         base64Text = base64Text.replace(/\n/g, "").replace(/\r/g, "").replace(/\t/g, "").replace(/\s/g, "");
         if (typeof atob !== "undefined") {
             return this.FromBinary(atob(base64Text));
@@ -68,7 +68,7 @@ export class Convert {
         }
     }
 
-    public static FromBase64Url(base64url: string) : ArrayBuffer {
+    public static FromBase64Url(base64url: string): ArrayBuffer {
         return this.FromBase64(this.Base64Padding(base64url.replace(/\-/g, "+").replace(/\_/g, "/")));
     }
 
@@ -76,7 +76,7 @@ export class Convert {
         return this.ToBase64(data).replace(/\+/g, "-").replace(/\//g, "_").replace(/\=/g, "");
     }
 
-    public static FromUtf8String(text: string) : ArrayBuffer {
+    public static FromUtf8String(text: string): ArrayBuffer {
         const s = unescape(encodeURIComponent(text));
         const uintArray = new Uint8Array(s.length);
         for (let i = 0; i < s.length; i++) {
@@ -92,7 +92,7 @@ export class Convert {
         return decodedString;
     }
 
-    public static FromBinary(text: string) : ArrayBuffer {
+    public static FromBinary(text: string): ArrayBuffer {
         const stringLength = text.length;
         const resultView = new Uint8Array(stringLength);
         for (let i = 0; i < stringLength; i++) {
@@ -136,7 +136,7 @@ export class Convert {
      *
      * @memberOf Convert
      */
-    public static FromHex(hexString: string) : ArrayBuffer {
+    public static FromHex(hexString: string): ArrayBuffer {
         const res = new Uint8Array(hexString.length / 2);
         for (let i = 0; i < hexString.length; i = i + 2) {
             const c = hexString.slice(i, i + 2);

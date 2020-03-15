@@ -9,6 +9,7 @@
         "noImplicitAny": true,
         "experimentalDecorators": true,
         "importHelpers": true,
+        "removeComments": true,
         "outDir": "out"
     },
     "exclude": [

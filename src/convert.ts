@@ -1,3 +1,5 @@
+import { BufferSourceConverter } from './buffer_source_converter';
+
 export type BufferEncoding = "utf8" | "binary" | "base64" | "base64url" | "hex" | string;
 
 declare const unescape: (value: string) => string;
@@ -6,7 +8,7 @@ declare const escape: (value: string) => string;
 function PrepareBuffer(buffer: BufferSource) {
     if (typeof Buffer !== "undefined" && Buffer.isBuffer(buffer)) {
         return new Uint8Array(buffer);
-    } else if (ArrayBuffer.isView(buffer)) {
+    } else if (BufferSourceConverter.isArrayBufferView(buffer)) {
         return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     } else {
         return new Uint8Array(buffer);

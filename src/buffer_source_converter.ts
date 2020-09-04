@@ -22,9 +22,13 @@ export class BufferSourceConverter {
   }
 
   public static isBufferSource(data: any): data is BufferSource {
+    return this.isArrayBufferView(data)
+      || data instanceof ArrayBuffer;
+  }
+
+  public static isArrayBufferView(data: any): data is ArrayBufferView {
     return ArrayBuffer.isView(data)
-      || data instanceof ArrayBuffer
-      || (data && data.buffer instanceof ArrayBuffer);
+    || (data && data.buffer instanceof ArrayBuffer);
   }
 
 }

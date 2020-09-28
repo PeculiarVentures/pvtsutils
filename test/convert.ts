@@ -10,13 +10,13 @@ describe("Convert", () => {
       Convert.FromString("123456789", "binary"),
       Convert.FromString("010203040506070809", "hex"),
       Convert.FromString("Awa=", "base64"),
-      Convert.FromString("Aw_=", "base64url"),
+      Convert.FromString("Aw_", "base64url"),
     ].forEach((buf, index) => {
       it(`Encoding ${enc} buf:${Convert.ToString(buf, enc)}`, () => {
         const str = Convert.ToString(buf, enc);
-        assert.equal(typeof str, "string");
+        assert.strictEqual(typeof str, "string");
         const newBuf = Convert.FromString(str, enc);
-        assert.equal(isEqual(buf, newBuf), true);
+        assert.strictEqual(isEqual(buf, newBuf), true);
       });
     });
   });
@@ -35,9 +35,48 @@ describe("Convert", () => {
       const str = "Привет";
       const buf = Convert.FromString(str);
       const res = Convert.ToString(buf);
-      assert.equal(str, res);
+      assert.strictEqual(str, res);
     });
 
+  });
+
+  context("hex", () => {
+    it("decode odd size", () => {
+      const buf = Convert.FromHex("10203");
+      console.log(buf);
+      const hex = Convert.ToHex(buf);
+      assert.strictEqual(hex, "010203");
+    })
+  });
+
+  context("isHex", () => {
+    it("correct", () => {
+      assert.strictEqual(Convert.isHex("1234567890ABCDEF"), true);
+    });
+    it("wrong", () => {
+      assert.strictEqual(Convert.isHex("1234567890ABCDEF!"), false);
+    });
+  });
+
+  context("isBase64", () => {
+    it("correct", () => {
+      assert.strictEqual(Convert.isBase64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890+/AA=="), true);
+    });
+    it("wrong size", () => {
+      assert.strictEqual(Convert.isBase64("ABA"), false);
+    });
+    it("wrong chars", () => {
+      assert.strictEqual(Convert.isBase64("ABA$"), false);
+    });
+  });
+
+  context("isBase64Url", () => {
+    it("correct", () => {
+      assert.strictEqual(Convert.isBase64Url("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_"), true);
+    });
+    it("wrong chars", () => {
+      assert.strictEqual(Convert.isBase64Url("ABA$"), false);
+    });
   });
 
 });

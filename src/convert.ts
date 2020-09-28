@@ -17,6 +17,21 @@ function PrepareBuffer(buffer: BufferSource) {
 
 export class Convert {
 
+    public static isHex(data: any): data is string {
+        return typeof data === "string"
+            && /^[a-z0-9]+$/i.test(data);
+    }
+
+    public static isBase64(data: any): data is string {
+        return typeof data === "string"
+            && /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(data);
+    }
+
+    public static isBase64Url(data: any): data is string {
+        return typeof data === "string"
+            && /^[a-zA-Z0-9-_]+$/i.test(data);
+    }
+
     public static ToString(buffer: BufferSource, enc: BufferEncoding = "utf8") {
         const buf = PrepareBuffer(buffer);
         switch (enc.toLowerCase()) {
@@ -62,6 +77,10 @@ export class Convert {
     }
 
     public static FromBase64(base64Text: string): ArrayBuffer {
+        if (!Convert.isBase64(base64Text)) {
+            throw new TypeError("Argument 'base64Text' is not Base64 encoded");
+        }
+
         base64Text = base64Text.replace(/\n/g, "").replace(/\r/g, "").replace(/\t/g, "").replace(/\s/g, "");
         if (typeof atob !== "undefined") {
             return this.FromBinary(atob(base64Text));
@@ -71,6 +90,10 @@ export class Convert {
     }
 
     public static FromBase64Url(base64url: string): ArrayBuffer {
+        if (!Convert.isBase64Url(base64url)) {
+            throw new TypeError("Argument 'base64url' is not Base64Url encoded");
+        }
+
         return this.FromBase64(this.Base64Padding(base64url.replace(/\-/g, "+").replace(/\_/g, "/")));
     }
 
@@ -139,6 +162,14 @@ export class Convert {
      * @memberOf Convert
      */
     public static FromHex(hexString: string): ArrayBuffer {
+        if (!Convert.isHex(hexString)) {
+            throw new TypeError("Argument 'hexString' is not HEX encoded");
+        }
+
+        if (hexString.length % 2) {
+            hexString = `0${hexString}`;
+        }
+
         const res = new Uint8Array(hexString.length / 2);
         for (let i = 0; i < hexString.length; i = i + 2) {
             const c = hexString.slice(i, i + 2);

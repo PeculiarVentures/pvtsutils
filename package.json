@@ -4,6 +4,7 @@
   "description": "pvtsutils is a set of common utility functions used in various Peculiar Ventures TypeScript based projects.",
   "main": "build/index.js",
   "module": "build/index.es.js",
+  "browser": "build/index.js",
   "types": "build/types/index.d.ts",
   "files": [
     "build/**/*.{ts,js}",

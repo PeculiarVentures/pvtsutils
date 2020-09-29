@@ -40,7 +40,37 @@ describe("Convert", () => {
 
   });
 
+  context("base64", () => {
+    it("decode empty string", () => {
+      const buf = Convert.FromBase64("\n\r ");
+      assert.strictEqual(buf.byteLength, 0);
+    });
+    it("decode with space chars", () => {
+      const buf = Convert.FromBase64("A\nQ\rA =");
+      assert.strictEqual(buf.byteLength, 2);
+    });
+  });
+
+  context("base64url", () => {
+    it("decode empty string", () => {
+      const buf = Convert.FromBase64Url("\n\r ");
+      assert.strictEqual(buf.byteLength, 0);
+    });
+    it("decode with space chars", () => {
+      const buf = Convert.FromBase64Url("A\nQ\rA ");
+      assert.strictEqual(buf.byteLength, 2);
+    });
+  });
+
   context("hex", () => {
+    it("decode empty string", () => {
+      const buf = Convert.FromHex("\n\r ");
+      assert.strictEqual(buf.byteLength, 0);
+    });
+    it("decode with space chars", () => {
+      const buf = Convert.FromHex("01\n02\r03 ");
+      assert.strictEqual(buf.byteLength, 3);
+    });
     it("decode odd size", () => {
       const buf = Convert.FromHex("10203");
       console.log(buf);

@@ -50,6 +50,10 @@ export class Convert {
         }
     }
     public static FromString(str: string, enc: BufferEncoding = "utf8"): ArrayBuffer {
+        if (!str) {
+            return new ArrayBuffer(0);
+        }
+
         switch (enc.toLowerCase()) {
             case "utf8":
                 return this.FromUtf8String(str);
@@ -76,25 +80,34 @@ export class Convert {
         }
     }
 
-    public static FromBase64(base64Text: string): ArrayBuffer {
-        if (!Convert.isBase64(base64Text)) {
+    public static FromBase64(base64: string): ArrayBuffer {
+        const formatted = this.formatString(base64);
+        if (!formatted) {
+            return new ArrayBuffer(0);
+        }
+
+        if (!Convert.isBase64(formatted)) {
             throw new TypeError("Argument 'base64Text' is not Base64 encoded");
         }
 
-        base64Text = base64Text.replace(/\n/g, "").replace(/\r/g, "").replace(/\t/g, "").replace(/\s/g, "");
         if (typeof atob !== "undefined") {
-            return this.FromBinary(atob(base64Text));
+            return this.FromBinary(atob(formatted));
         } else {
-            return new Uint8Array(Buffer.from(base64Text, "base64")).buffer;
+            return new Uint8Array(Buffer.from(formatted, "base64")).buffer;
         }
     }
 
     public static FromBase64Url(base64url: string): ArrayBuffer {
-        if (!Convert.isBase64Url(base64url)) {
+        const formatted = this.formatString(base64url);
+        if (!formatted) {
+            return new ArrayBuffer(0);
+        }
+
+        if (!Convert.isBase64Url(formatted)) {
             throw new TypeError("Argument 'base64url' is not Base64Url encoded");
         }
 
-        return this.FromBase64(this.Base64Padding(base64url.replace(/\-/g, "+").replace(/\_/g, "/")));
+        return this.FromBase64(this.Base64Padding(formatted.replace(/\-/g, "+").replace(/\_/g, "/")));
     }
 
     public static ToBase64Url(data: BufferSource): string {
@@ -156,23 +169,28 @@ export class Convert {
      * Converts HEX string to buffer
      *
      * @static
-     * @param {string} hexString
+     * @param {string} formatted
      * @returns {Uint8Array}
      *
      * @memberOf Convert
      */
     public static FromHex(hexString: string): ArrayBuffer {
-        if (!Convert.isHex(hexString)) {
+        let formatted = this.formatString(hexString);
+        if (!formatted) {
+            return new ArrayBuffer(0);
+        }
+
+        if (!Convert.isHex(formatted)) {
             throw new TypeError("Argument 'hexString' is not HEX encoded");
         }
 
-        if (hexString.length % 2) {
-            hexString = `0${hexString}`;
+        if (formatted.length % 2) {
+            formatted = `0${formatted}`;
         }
 
-        const res = new Uint8Array(hexString.length / 2);
-        for (let i = 0; i < hexString.length; i = i + 2) {
-            const c = hexString.slice(i, i + 2);
+        const res = new Uint8Array(formatted.length / 2);
+        for (let i = 0; i < formatted.length; i = i + 2) {
+            const c = formatted.slice(i, i + 2);
             res[i / 2] = parseInt(c, 16);
         }
         return res.buffer;
@@ -186,6 +204,14 @@ export class Convert {
             }
         }
         return base64;
+    }
+
+    /**
+     * Removes odd chars from string data
+     * @param data String data
+     */
+    public static formatString(data: string) {
+        return data?.replace(/[\n\r\t ]/g, "") || "";
     }
 
 }

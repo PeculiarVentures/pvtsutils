@@ -1,3 +1,5 @@
+export type BufferSource = ArrayBuffer | ArrayBufferView;
+
 export class BufferSourceConverter {
 
   public static toArrayBuffer(data: BufferSource) {

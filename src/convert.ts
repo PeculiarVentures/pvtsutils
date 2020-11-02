@@ -1,9 +1,12 @@
-import { BufferSourceConverter } from './buffer_source_converter';
+import { BufferSource, BufferSourceConverter } from "./buffer_source_converter";
 
 export type BufferEncoding = "utf8" | "binary" | "base64" | "base64url" | "hex" | string;
 
-declare const unescape: (value: string) => string;
-declare const escape: (value: string) => string;
+// augment global scope with names whose availability varies by environment
+declare global {
+  var btoa: undefined | ((data: string) => string);
+  var atob: undefined | ((data: string) => string);
+}
 
 function PrepareBuffer(buffer: BufferSource) {
     if (typeof Buffer !== "undefined" && Buffer.isBuffer(buffer)) {

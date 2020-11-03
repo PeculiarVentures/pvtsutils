@@ -4,7 +4,7 @@ let pkg = require("./package.json");
 
 const banner = [
   "/**",
-  " * Copyright (c) 2019, Peculiar Ventures, All rights reserved.",
+  " * Copyright (c) 2020, Peculiar Ventures, All rights reserved.",
   " */",
   "",
 ].join("\n");

@@ -2,11 +2,8 @@ import { BufferSource, BufferSourceConverter } from "./buffer_source_converter";
 
 export type BufferEncoding = "utf8" | "binary" | "base64" | "base64url" | "hex" | string;
 
-// augment global scope with names whose availability varies by environment
-declare global {
-  var btoa: undefined | ((data: string) => string);
-  var atob: undefined | ((data: string) => string);
-}
+declare function btoa(data: string): string;
+declare function atob(data: string): string;
 
 function PrepareBuffer(buffer: BufferSource) {
     if (typeof Buffer !== "undefined" && Buffer.isBuffer(buffer)) {

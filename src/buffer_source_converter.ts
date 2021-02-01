@@ -1,6 +1,10 @@
 export type BufferSource = ArrayBuffer | ArrayBufferView;
 
 export class BufferSourceConverter {
+  
+  public static isArrayBuffer (data: any): data is ArrayBuffer {
+    return Object.prototype.toString.call(data) === '[object ArrayBuffer]'
+  }
 
   public static toArrayBuffer(data: BufferSource) {
     const buf = this.toUint8Array(data);
@@ -17,7 +21,7 @@ export class BufferSourceConverter {
     if (ArrayBuffer.isView(data)) {
       return new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
     }
-    if (data instanceof ArrayBuffer) {
+    if (this.isArrayBuffer(data)) {
       return new Uint8Array(data);
     }
     throw new TypeError("The provided value is not of type '(ArrayBuffer or ArrayBufferView)'");
@@ -25,12 +29,12 @@ export class BufferSourceConverter {
 
   public static isBufferSource(data: any): data is BufferSource {
     return this.isArrayBufferView(data)
-      || data instanceof ArrayBuffer;
+      || this.isArrayBuffer(data);
   }
 
   public static isArrayBufferView(data: any): data is ArrayBufferView {
     return ArrayBuffer.isView(data)
-    || (data && data.buffer instanceof ArrayBuffer);
+    || (data && this.isArrayBuffer(data.buffer));
   }
 
 }

@@ -1,7 +1,7 @@
 export type BufferSource = ArrayBuffer | ArrayBufferView;
 
 export class BufferSourceConverter {
-  
+
   public static isArrayBuffer (data: any): data is ArrayBuffer {
     return Object.prototype.toString.call(data) === '[object ArrayBuffer]'
   }

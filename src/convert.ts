@@ -7,7 +7,7 @@ declare function atob(data: string): string;
 
 function PrepareBuffer(buffer: BufferSource) {
     if (typeof Buffer !== "undefined" && Buffer.isBuffer(buffer)) {
-        return new Uint8Array(buffer);
+        return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     } else if (BufferSourceConverter.isArrayBufferView(buffer)) {
         return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     } else {

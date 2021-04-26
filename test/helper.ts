@@ -5,8 +5,8 @@ describe("helper", () => {
 
   it("assign", () => {
     const obj = assign({}, { a: 1 }, { b: 2 }, { b: 3 });
-    assert.equal(obj.a, 1);
-    assert.equal(obj.b, 3);
+    assert.strictEqual(obj.a, 1);
+    assert.strictEqual(obj.b, 3);
   });
 
   it("combine", () => {
@@ -16,10 +16,10 @@ describe("helper", () => {
 
     const b = new Uint8Array(combine(b1, b2, b3));
 
-    assert.equal(b.byteLength, 3);
-    assert.equal(b[0], 1);
-    assert.equal(b[1], 2);
-    assert.equal(b[2], 3);
+    assert.strictEqual(b.byteLength, 3);
+    assert.strictEqual(b[0], 1);
+    assert.strictEqual(b[1], 2);
+    assert.strictEqual(b[2], 3);
   });
 
   context("isEqual", () => {
@@ -28,28 +28,28 @@ describe("helper", () => {
       const b1 = new ArrayBuffer(1);
       const b2: any = null;
 
-      assert.equal(isEqual(b1, b2), false);
+      assert.strictEqual(isEqual(b1, b2), false);
     });
 
     it("different length", () => {
       const b1 = new ArrayBuffer(1);
       const b2 = new ArrayBuffer(2);
 
-      assert.equal(isEqual(b1, b2), false);
+      assert.strictEqual(isEqual(b1, b2), false);
     });
 
     it("different value", () => {
       const b1 = new Uint8Array([1, 2, 3]);
       const b2 = new Uint8Array([1, 2, 0]);
 
-      assert.equal(isEqual(b1, b2), false);
+      assert.strictEqual(isEqual(b1, b2), false);
     });
 
     it("equal", () => {
       const b1 = new Uint8Array([1, 2, 3]);
       const b2 = new Uint8Array([1, 2, 3]);
 
-      assert.equal(isEqual(b1, b2), true);
+      assert.strictEqual(isEqual(b1, b2), true);
     });
 
   });

@@ -11,6 +11,7 @@ describe("Convert", () => {
       Convert.FromString("010203040506070809", "hex"),
       Convert.FromString("Awa=", "base64"),
       Convert.FromString("Aw_", "base64url"),
+      Buffer.from("text")
     ].forEach((buf, index) => {
       it(`Encoding ${enc} buf:${Convert.ToString(buf, enc)}`, () => {
         const str = Convert.ToString(buf, enc);
@@ -73,7 +74,6 @@ describe("Convert", () => {
     });
     it("decode odd size", () => {
       const buf = Convert.FromHex("10203");
-      console.log(buf);
       const hex = Convert.ToHex(buf);
       assert.strictEqual(hex, "010203");
     })

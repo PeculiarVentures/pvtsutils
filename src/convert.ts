@@ -5,16 +5,6 @@ export type BufferEncoding = "utf8" | "binary" | "base64" | "base64url" | "hex" 
 declare function btoa(data: string): string;
 declare function atob(data: string): string;
 
-function PrepareBuffer(buffer: BufferSource) {
-    if (typeof Buffer !== "undefined" && Buffer.isBuffer(buffer)) {
-        return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-    } else if (BufferSourceConverter.isArrayBufferView(buffer)) {
-        return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-    } else {
-        return new Uint8Array(buffer);
-    }
-}
-
 export class Convert {
 
     public static isHex(data: any): data is string {
@@ -33,7 +23,7 @@ export class Convert {
     }
 
     public static ToString(buffer: BufferSource, enc: BufferEncoding = "utf8") {
-        const buf = PrepareBuffer(buffer);
+        const buf = BufferSourceConverter.toUint8Array(buffer);
         switch (enc.toLowerCase()) {
             case "utf8":
                 return this.ToUtf8String(buf);
@@ -71,7 +61,7 @@ export class Convert {
     }
 
     public static ToBase64(buffer: BufferSource): string {
-        const buf = PrepareBuffer(buffer);
+        const buf = BufferSourceConverter.toUint8Array(buffer);
         if (typeof btoa !== "undefined") {
             const binary = this.ToString(buf, "binary");
             return btoa(binary);
@@ -124,7 +114,7 @@ export class Convert {
     }
 
     public static ToUtf8String(buffer: BufferSource): string {
-        const buf = PrepareBuffer(buffer);
+        const buf = BufferSourceConverter.toUint8Array(buffer);
         const encodedString = String.fromCharCode.apply(null, buf);
         const decodedString = decodeURIComponent(escape(encodedString));
         return decodedString;
@@ -139,7 +129,7 @@ export class Convert {
         return resultView.buffer;
     }
     public static ToBinary(buffer: BufferSource): string {
-        const buf = PrepareBuffer(buffer);
+        const buf = BufferSourceConverter.toUint8Array(buffer);
         let resultString = "";
         const len = buf.length;
         for (let i = 0; i < len; i++) {
@@ -154,7 +144,7 @@ export class Convert {
      * @returns string
      */
     public static ToHex(buffer: BufferSource): string {
-        const buf = PrepareBuffer(buffer);
+        const buf = BufferSourceConverter.toUint8Array(buffer);
         const splitter = "";
         const res: string[] = [];
         const len = buf.length;

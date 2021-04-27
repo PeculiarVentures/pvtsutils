@@ -1,3 +1,4 @@
+// tslint:disable: unified-signatures
 export type BufferSource = ArrayBuffer | ArrayBufferView;
 
 export interface ArrayBufferViewConstructor<T extends ArrayBufferView> {

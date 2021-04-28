@@ -36,11 +36,11 @@ export class BufferSourceConverter {
     if (typeof Buffer !== "undefined" && Buffer.isBuffer(data)) {
       return new type(data.buffer, data.byteOffset, data.byteLength);
     }
-    if (ArrayBuffer.isView(data)) {
-      return new type(data.buffer, data.byteOffset, data.byteLength);
-    }
     if (this.isArrayBuffer(data)) {
       return new type(data);
+    }
+    if (this.isArrayBufferView(data)) {
+      return new type(data.buffer, data.byteOffset, data.byteLength);
     }
     throw new TypeError("The provided value is not of type '(ArrayBuffer or ArrayBufferView)'");
   }

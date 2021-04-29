@@ -130,12 +130,9 @@ export class Convert {
     }
     public static ToBinary(buffer: BufferSource): string {
         const buf = BufferSourceConverter.toUint8Array(buffer);
-        let resultString = "";
-        const len = buf.length;
-        for (let i = 0; i < len; i++) {
-            resultString = resultString + String.fromCharCode(buf[i]);
-        }
-        return resultString;
+        const res = String.fromCharCode.apply(null, buf);
+
+        return res;
     }
 
     /**
@@ -149,8 +146,8 @@ export class Convert {
         const res: string[] = [];
         const len = buf.length;
         for (let i = 0; i < len; i++) {
-            const char = buf[i].toString(16);
-            res.push(char.length === 1 ? "0" + char : char);
+            const char = buf[i].toString(16).padStart(2, "0");
+            res.push(char);
         }
         return res.join(splitter);
     }

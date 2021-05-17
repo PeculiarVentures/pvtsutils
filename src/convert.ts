@@ -115,7 +115,11 @@ export class Convert {
 
     public static ToUtf8String(buffer: BufferSource): string {
         const buf = BufferSourceConverter.toUint8Array(buffer);
-        const encodedString = String.fromCharCode.apply(null, buf);
+        let encodedString = "";
+        for (const char of buf) {
+            encodedString += String.fromCharCode(char);
+
+        }
         const decodedString = decodeURIComponent(escape(encodedString));
         return decodedString;
     }
@@ -128,9 +132,14 @@ export class Convert {
         }
         return resultView.buffer;
     }
+
     public static ToBinary(buffer: BufferSource): string {
         const buf = BufferSourceConverter.toUint8Array(buffer);
-        const res = String.fromCharCode.apply(null, buf);
+
+        let res = "";
+        for (const charCode of buf) {
+            res += String.fromCharCode(charCode);
+        }
 
         return res;
     }

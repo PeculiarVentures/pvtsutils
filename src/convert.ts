@@ -116,9 +116,8 @@ export class Convert {
     public static ToUtf8String(buffer: BufferSource): string {
         const buf = BufferSourceConverter.toUint8Array(buffer);
         let encodedString = "";
-        for (const char of buf) {
-            encodedString += String.fromCharCode(char);
-
+        for (let i = 0; i < buf.length; i++) {
+            encodedString += String.fromCharCode(buf[i]);
         }
         const decodedString = decodeURIComponent(escape(encodedString));
         return decodedString;
@@ -137,8 +136,8 @@ export class Convert {
         const buf = BufferSourceConverter.toUint8Array(buffer);
 
         let res = "";
-        for (const charCode of buf) {
-            res += String.fromCharCode(charCode);
+        for (let i = 0; i < buf.length; i++) {
+            res += String.fromCharCode(buf[i]);
         }
 
         return res;

@@ -19,6 +19,7 @@
         ],
         "no-console": [
             false
-        ]
+        ],
+        "prefer-for-of": false
     }
 }

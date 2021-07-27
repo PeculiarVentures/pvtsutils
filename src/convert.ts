@@ -1,9 +1,64 @@
 import { BufferSource, BufferSourceConverter } from "./buffer_source_converter";
 
 export type BufferEncoding = "utf8" | "binary" | "base64" | "base64url" | "hex" | string;
+export type TextEncoding = "ascii" | "utf8" | "utf16" | "utf16be" | "utf16le" | "usc2";
 
 declare function btoa(data: string): string;
 declare function atob(data: string): string;
+
+abstract class Utf8Converter {
+
+    public static fromString(text: string): ArrayBuffer {
+        const s = unescape(encodeURIComponent(text));
+        const uintArray = new Uint8Array(s.length);
+
+        for (let i = 0; i < s.length; i++) {
+            uintArray[i] = s.charCodeAt(i);
+        }
+
+        return uintArray.buffer;
+    }
+
+    public static toString(buffer: BufferSource): string {
+        const buf = BufferSourceConverter.toUint8Array(buffer);
+        let encodedString = "";
+
+        for (let i = 0; i < buf.length; i++) {
+            encodedString += String.fromCharCode(buf[i]);
+        }
+        const decodedString = decodeURIComponent(escape(encodedString));
+
+        return decodedString;
+    }
+}
+
+class Utf16Converter {
+
+    public static toString(buffer: BufferSource, littleEndian = false): string {
+        const arrayBuffer = BufferSourceConverter.toArrayBuffer(buffer);
+        const dataView = new DataView(arrayBuffer);
+        let res = "";
+
+        for (let i = 0; i < arrayBuffer.byteLength; i += 2) {
+            const code = dataView.getUint16(i, littleEndian)
+            res += String.fromCharCode(code);
+        }
+
+        return res;
+    }
+
+    public static fromString(text: string, littleEndian = false): ArrayBuffer {
+        const res = new ArrayBuffer(text.length * 2);
+        const dataView = new DataView(res);
+
+        for (let i = 0; i < text.length; i++) {
+            dataView.setUint16(i * 2, text.charCodeAt(i), littleEndian);
+        }
+
+        return res;
+    }
+
+}
 
 export class Convert {
 
@@ -35,10 +90,16 @@ export class Convert {
                 return this.ToBase64(buf);
             case "base64url":
                 return this.ToBase64Url(buf);
+            case "utf16le":
+                return Utf16Converter.toString(buf, true);
+            case "utf16":
+            case "utf16be":
+                return Utf16Converter.toString(buf);
             default:
                 throw new Error(`Unknown type of encoding '${enc}'`);
         }
     }
+
     public static FromString(str: string, enc: BufferEncoding = "utf8"): ArrayBuffer {
         if (!str) {
             return new ArrayBuffer(0);
@@ -55,6 +116,11 @@ export class Convert {
                 return this.FromBase64(str);
             case "base64url":
                 return this.FromBase64Url(str);
+            case "utf16le":
+                return Utf16Converter.fromString(str, true);
+            case "utf16":
+            case "utf16be":
+                return Utf16Converter.fromString(str);
             default:
                 throw new Error(`Unknown type of encoding '${enc}'`);
         }
@@ -104,23 +170,40 @@ export class Convert {
         return this.ToBase64(data).replace(/\+/g, "-").replace(/\//g, "_").replace(/\=/g, "");
     }
 
-    public static FromUtf8String(text: string): ArrayBuffer {
-        const s = unescape(encodeURIComponent(text));
-        const uintArray = new Uint8Array(s.length);
-        for (let i = 0; i < s.length; i++) {
-            uintArray[i] = s.charCodeAt(i);
+    protected static DEFAULT_UTF8_ENCODING: TextEncoding = "utf8";
+
+    public static FromUtf8String(text: string, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): ArrayBuffer {
+        switch (encoding) {
+            case "ascii":
+                return this.FromBinary(text);
+            case "utf8":
+                return Utf8Converter.fromString(text);
+            case "utf16":
+            case "utf16be":
+                return Utf16Converter.fromString(text);
+            case "utf16le":
+            case "usc2":
+                return Utf16Converter.fromString(text, true);
+            default:
+                throw new Error(`Unknown type of encoding '${encoding}'`);
         }
-        return uintArray.buffer;
     }
 
-    public static ToUtf8String(buffer: BufferSource): string {
-        const buf = BufferSourceConverter.toUint8Array(buffer);
-        let encodedString = "";
-        for (let i = 0; i < buf.length; i++) {
-            encodedString += String.fromCharCode(buf[i]);
+    public static ToUtf8String(buffer: BufferSource, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): string {
+        switch (encoding) {
+            case "ascii":
+                return this.ToBinary(buffer);
+            case "utf8":
+                return Utf8Converter.toString(buffer);
+            case "utf16":
+            case "utf16be":
+                return Utf16Converter.toString(buffer);
+            case "utf16le":
+            case "usc2":
+                return Utf16Converter.toString(buffer, true);
+            default:
+                throw new Error(`Unknown type of encoding '${encoding}'`);
         }
-        const decodedString = decodeURIComponent(escape(encodedString));
-        return decodedString;
     }
 
     public static FromBinary(text: string): ArrayBuffer {
@@ -189,6 +272,26 @@ export class Convert {
             res[i / 2] = parseInt(c, 16);
         }
         return res.buffer;
+    }
+
+    /**
+     * Converts UTF-16 encoded buffer to UTF-8 string
+     * @param buffer UTF-16 encoded buffer
+     * @param littleEndian Indicates whether the char code is stored in little- or big-endian format
+     * @returns UTF-8 string
+     */
+    public static ToUtf16String(buffer: BufferSource, littleEndian = false): string {
+        return Utf16Converter.toString(buffer, littleEndian);
+    }
+
+    /**
+     * Converts UTF-8 string to UTF-16 encoded buffer
+     * @param text UTF-8 string
+     * @param littleEndian Indicates whether the char code is stored in little- or big-endian format
+     * @returns UTF-16 encoded buffer
+     */
+    public static FromUtf16String(text: string, littleEndian = false): ArrayBuffer {
+        return Utf16Converter.fromString(text, littleEndian);
     }
 
     protected static Base64Padding(base64: string): string {

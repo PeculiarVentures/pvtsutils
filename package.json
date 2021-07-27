@@ -37,6 +37,7 @@
     "convert",
     "hex",
     "utf8",
+    "utf16",
     "base64",
     "base64url",
     "binary",

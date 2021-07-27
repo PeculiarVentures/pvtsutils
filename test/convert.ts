@@ -1,4 +1,5 @@
 import * as assert from "assert";
+import { Console } from "node:console";
 import { Convert, isEqual } from "../src";
 
 describe("Convert", () => {
@@ -77,6 +78,49 @@ describe("Convert", () => {
       const hex = Convert.ToHex(buf);
       assert.strictEqual(hex, "010203");
     })
+  });
+
+  context("utf16", () => {
+    context("to/from Utf8String", () => {
+      it("LE", () => {
+        const text = "Привет";
+        const buf = Convert.FromUtf8String(text, "utf16le");
+        assert.strictEqual(buf.byteLength, 12);
+        assert.strictEqual(Convert.ToHex(buf), "1f0440043804320435044204");
+
+        const text2 = Convert.ToUtf8String(buf, "utf16le");
+        assert.strictEqual(text2, text);
+      });
+      it("BE", () => {
+        const text = "Привет";
+        const buf = Convert.FromUtf8String(text, "utf16be");
+        assert.strictEqual(buf.byteLength, 12);
+        assert.strictEqual(Convert.ToHex(buf), "041f04400438043204350442");
+
+        const text2 = Convert.ToUtf8String(buf, "utf16be");
+        assert.strictEqual(text2, text);
+      });
+    });
+    context("to/from Utf16String", () => {
+      it("LE", () => {
+        const text = "Привет";
+        const buf = Convert.FromUtf16String(text, true);
+        assert.strictEqual(buf.byteLength, 12);
+        assert.strictEqual(Convert.ToHex(buf), "1f0440043804320435044204");
+
+        const text2 = Convert.ToUtf16String(buf, true);
+        assert.strictEqual(text2, text);
+      });
+      it("BE", () => {
+        const text = "Привет";
+        const buf = Convert.FromUtf16String(text);
+        assert.strictEqual(buf.byteLength, 12);
+        assert.strictEqual(Convert.ToHex(buf), "041f04400438043204350442");
+
+        const text2 = Convert.ToUtf16String(buf);
+        assert.strictEqual(text2, text);
+      });
+    });
   });
 
   context("isHex", () => {

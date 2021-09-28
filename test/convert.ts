@@ -1,5 +1,4 @@
 import * as assert from "assert";
-import { Console } from "node:console";
 import { Convert, isEqual } from "../src";
 
 describe("Convert", () => {

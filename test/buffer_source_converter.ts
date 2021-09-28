@@ -65,4 +65,32 @@ context("BufferSourceConverter", () => {
 
   });
 
+  context("isEqual", () => {
+
+    it("not equal, the same length", () => {
+      const a = new Uint8Array([1, 2, 3, 4, 5]);
+      const b = new Uint8Array([1, 2, 3, 4, 6]);
+
+      const res = BufferSourceConverter.isEqual(a, b);
+      assert.strictEqual(res, false);
+    });
+
+    it("not equal", () => {
+      const a = new Uint8Array([1, 2, 3, 4, 5]);
+      const b = new Uint8Array([1, 2, 3, 4, 5, 6]);
+
+      const res = BufferSourceConverter.isEqual(a, b);
+      assert.strictEqual(res, false);
+    });
+
+    it("equal", () => {
+      const a = new Uint8Array([1, 2, 3, 4, 5]);
+      const b = new Uint8Array([1, 2, 3, 4, 5]);
+
+      const res = BufferSourceConverter.isEqual(a, b);
+      assert.strictEqual(res, true);
+    });
+
+  });
+
 });

@@ -55,4 +55,21 @@ export class BufferSourceConverter {
       || (data && this.isArrayBuffer(data.buffer));
   }
 
+  public static isEqual(a: BufferSource, b: BufferSource): boolean {
+    const aView = BufferSourceConverter.toUint8Array(a);
+    const bView = BufferSourceConverter.toUint8Array(b);
+
+    if (aView.length !== bView.byteLength) {
+      return false;
+    }
+
+    for (let i =0; i < aView.length; i++) {
+      if (aView[i] !== bView[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
 }

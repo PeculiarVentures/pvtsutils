@@ -33,7 +33,7 @@ export class BufferSourceConverter {
    * @returns Specified ArrayBufferView
    */
   public static toView<T extends ArrayBufferView>(data: BufferSource, type: ArrayBufferViewConstructor<T>): T {
-    if (typeof Buffer !== "undefined" && Buffer.isBuffer(data)) {
+    if (typeof Buffer !== "undefined" && typeof Buffer.isBuffer === "function" && Buffer.isBuffer(data)) {
       return new type(data.buffer, data.byteOffset, data.byteLength);
     }
     if (this.isArrayBuffer(data)) {

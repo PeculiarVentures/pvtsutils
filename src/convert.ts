@@ -40,7 +40,7 @@ class Utf16Converter {
         let res = "";
 
         for (let i = 0; i < arrayBuffer.byteLength; i += 2) {
-            const code = dataView.getUint16(i, littleEndian)
+            const code = dataView.getUint16(i, littleEndian);
             res += String.fromCharCode(code);
         }
 

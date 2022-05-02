@@ -45,6 +45,13 @@ context("BufferSourceConverter", () => {
     assert.strictEqual(Convert.ToHex(data), "0506070809");
   });
 
+  it("convert incorrect type", () => {
+    const source = "wrong data";
+    assert.throws(() => {
+      BufferSourceConverter.toArrayBuffer(source as any);
+    }, TypeError);
+  });
+
   context("isBufferSource", () => {
 
     it("ArrayBufferView", () => {

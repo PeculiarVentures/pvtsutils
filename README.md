@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/pvtsutils/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/pvtsutils?branch=master)
-[![CircleCI](https://circleci.com/gh/PeculiarVentures/pvtsutils.svg?style=svg)](https://circleci.com/gh/PeculiarVentures/pvtsutils)
+[![Test](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/test.yml/badge.svg)](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/test.yml)
 
 # pvtsutils
 pvtsutils is a set of common utility functions used in various Peculiar Ventures TypeScript based projects.

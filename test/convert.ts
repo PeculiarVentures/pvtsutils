@@ -76,7 +76,7 @@ describe("Convert", () => {
       const buf = Convert.FromHex("10203");
       const hex = Convert.ToHex(buf);
       assert.strictEqual(hex, "010203");
-    })
+    });
   });
 
   context("utf16", () => {

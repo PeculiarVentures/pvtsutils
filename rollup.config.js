@@ -1,15 +1,18 @@
+import path from "path";
+import fs from "fs";
 import typescript from "rollup-plugin-typescript2";
+import dts from "rollup-plugin-dts";
+import pkg from "./package.json";
 
-let pkg = require("./package.json");
-
+const LICENSE = fs.readFileSync("LICENSE", { encoding: "utf-8" });
 const banner = [
-  "/**",
-  " * Copyright (c) 2020, Peculiar Ventures, All rights reserved.",
+  "/*!",
+  ...LICENSE.split("\n").map(o => ` * ${o}`),
   " */",
   "",
 ].join("\n");
 const input = "src/index.ts";
-const external = Object.keys(pkg.dependencies);
+const external = Object.keys(pkg.dependencies || {});
 
 export default [
   {
@@ -20,27 +23,38 @@ export default [
         clean: true,
         tsconfigOverride: {
           compilerOptions: {
-            removeComments: true,
             module: "ES2015",
+            removeComments: true,
           }
         }
       }),
     ],
-    external,
+    external: [...external],
     output: [
       {
         banner,
         file: pkg.main,
-        format: "umd",
-        globals: {
-          tslib: "tslib",
-        },
-        name: "pvtsutils"
+        format: "cjs",
       },
       {
         banner,
         file: pkg.module,
-        format: "esm",
+        format: "es",
+      },
+    ],
+  },
+  {
+    input,
+    external: [...external],
+    plugins: [
+      dts({
+        tsconfig: path.resolve(__dirname, "./tsconfig.json")
+      })
+    ],
+    output: [
+      {
+        banner,
+        file: pkg.types,
       }
     ]
   },

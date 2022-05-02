@@ -1,17 +1,15 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "ES2018",
-        "lib": [
-            "es2015"
-        ],
-        "noImplicitAny": true,
-        "experimentalDecorators": true,
-        "importHelpers": true,
-        "removeComments": true,
-        "outDir": "out"
-    },
-    "exclude": [
-        "build"
-    ]
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "CommonJS",
+    "strict": true,
+    "importHelpers": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true,
+    "noErrorTruncation": true,
+    "experimentalDecorators": true
+  },
+  "exclude": [
+    "build/**/*.ts"
+  ]
 }

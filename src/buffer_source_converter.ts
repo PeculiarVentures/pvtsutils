@@ -1,9 +1,9 @@
-// tslint:disable: unified-signatures
 export type BufferSource = ArrayBuffer | ArrayBufferView;
 
 export interface ArrayBufferViewConstructor<T extends ArrayBufferView> {
   readonly prototype: T;
   new(length: number): T;
+  // tslint:disable-next-line: unified-signatures
   new(array: ArrayLike<number> | ArrayBufferLike): T;
   new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): T;
 }
@@ -33,11 +33,7 @@ export class BufferSourceConverter {
       return data;
     }
 
-    const buf = this.toUint8Array(data);
-    if (buf.byteOffset || buf.length) {
-      return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length);
-    }
-    return buf.buffer;
+    return this.toUint8Array(data).slice().buffer;
   }
 
   /**

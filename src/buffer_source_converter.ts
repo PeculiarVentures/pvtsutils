@@ -59,9 +59,6 @@ export class BufferSourceConverter {
     if (this.isArrayBuffer(data)) {
       return new type(data);
     }
-    if (typeof Buffer !== UNDEFINED && typeof Buffer.isBuffer === FUNCTION && Buffer.isBuffer(data)) {
-      return new type(data.buffer, data.byteOffset, data.byteLength);
-    }
     if (this.isArrayBufferView(data)) {
       return new type(data.buffer, data.byteOffset, data.byteLength);
     }

@@ -100,4 +100,30 @@ context("BufferSourceConverter", () => {
 
   });
 
+  context("concat", () => {
+    const buf1 = new ArrayBuffer(1);
+    const buf2 = new Uint8Array([1, 2, 3, 4]);
+    const buf3 = new Uint16Array([5, 6]);
+    const buf4 = buf2.subarray(1, 3);
+    const testVector = "0001020304050006000203";
+
+    it("spread arguments", () => {
+      const res = BufferSourceConverter.concat(buf1, buf2, buf3, buf4);
+      assert.ok(res instanceof ArrayBuffer);
+      assert.strictEqual(Convert.ToHex(res), testVector);
+    });
+
+    it("array", () => {
+      const res = BufferSourceConverter.concat([buf1, buf2, buf3, buf4]);
+      assert.ok(res instanceof ArrayBuffer);
+      assert.strictEqual(Convert.ToHex(res), testVector);
+    });
+
+    it("type", () => {
+      const res = BufferSourceConverter.concat([buf1, buf2, buf3, buf4], Uint8Array);
+      assert.strictEqual(Convert.ToHex(res), testVector);
+      assert.ok(res instanceof Uint8Array);
+    });
+  });
+
 });

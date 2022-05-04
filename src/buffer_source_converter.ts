@@ -52,6 +52,9 @@ export class BufferSourceConverter {
    * @returns Specified ArrayBufferView
    */
   public static toView<T extends ArrayBufferView>(data: BufferSource, type: ArrayBufferViewConstructor<T>): T {
+    if (data.constructor === type) {
+      return data;
+    }
     if (this.isArrayBuffer(data)) {
       return new type(data);
     }
@@ -102,6 +105,52 @@ export class BufferSourceConverter {
     }
 
     return true;
+  }
+
+  /**
+   * Concatenates buffers
+   * @param buffers List of buffers
+   * @returns Concatenated buffer
+   */
+  public static concat(...buffers: BufferSource[]): ArrayBuffer;
+  /**
+   * Concatenates buffers
+   * @param buffers List of buffers
+   * @returns Concatenated buffer
+   */
+  public static concat(buffers: BufferSource[]): ArrayBuffer;
+  /**
+   * Concatenates buffers and converts it into specified ArrayBufferView
+   * @param buffers List of buffers
+   * @param type ArrayBufferView constructor
+   * @returns Concatenated buffer of specified type
+   */
+  public static concat<T extends ArrayBufferView>(buffers: BufferSource[], type: ArrayBufferViewConstructor<T>): T;
+  public static concat(...args: any): BufferSource {
+    if (Array.isArray(args[0])) {
+      const buffers = args[0];
+      let size = 0;
+      for (const buffer of buffers) {
+        size += buffer.byteLength;
+      }
+
+      const res = new Uint8Array(size);
+
+      let offset = 0;
+      for (const buffer of buffers) {
+        const view = this.toUint8Array(buffer);
+        res.set(view, offset);
+
+        offset += view.length;
+      }
+
+      if (args[1]) {
+        return this.toView(res, args[1]);
+      }
+      return res.buffer;
+    } else {
+      return this.concat(args);
+    }
   }
 
 }

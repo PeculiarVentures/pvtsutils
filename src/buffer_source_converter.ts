@@ -9,8 +9,6 @@ export interface ArrayBufferViewConstructor<T extends ArrayBufferView> {
 }
 
 const ARRAY_BUFFER_NAME = "[object ArrayBuffer]";
-const UNDEFINED = "undefined";
-const FUNCTION = "function";
 
 export class BufferSourceConverter {
 
@@ -31,6 +29,10 @@ export class BufferSourceConverter {
   public static toArrayBuffer(data: BufferSource): ArrayBuffer {
     if (this.isArrayBuffer(data)) {
       return data;
+    }
+    if (data.byteLength === data.buffer.byteLength) {
+      // if view is not offset return it's buffer without copying
+      return data.buffer;
     }
 
     return this.toUint8Array(data).slice().buffer;

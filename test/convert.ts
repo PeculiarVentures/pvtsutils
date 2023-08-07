@@ -5,7 +5,7 @@ describe("Convert", () => {
 
   ["utf8", "binary", "hex", "base64", "base64url"].forEach((enc) => {
     [
-      new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9]).buffer,
+      new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]).buffer,
       Convert.FromString("Привет", "utf8"),
       Convert.FromString("123456789", "binary"),
       Convert.FromString("010203040506070809", "hex"),
@@ -13,7 +13,7 @@ describe("Convert", () => {
       Convert.FromString("Aw_", "base64url"),
       Buffer.from("text")
     ].forEach((buf, index) => {
-      it(`Encoding ${enc} buf:${Convert.ToString(buf, enc)}`, () => {
+      it(`Encoding ${enc} buf: 0x${Convert.ToHex(buf)}`, () => {
         const str = Convert.ToString(buf, enc);
         assert.strictEqual(typeof str, "string");
         const newBuf = Convert.FromString(str, enc);

@@ -6,6 +6,12 @@ export type TextEncoding = "ascii" | "utf8" | "utf16" | "utf16be" | "utf16le" | 
 declare function btoa(data: string): string;
 declare function atob(data: string): string;
 
+const STRING_TYPE = "string";
+
+const HEX_REGEX = /^[0-9a-f]+$/i;
+const BASE64_REGEX = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+const BASE64URL_REGEX = /^[a-zA-Z0-9-_]+$/;
+
 abstract class Utf8Converter {
 
     public static fromString(text: string): ArrayBuffer {
@@ -63,18 +69,18 @@ class Utf16Converter {
 export class Convert {
 
     public static isHex(data: any): data is string {
-        return typeof data === "string"
-            && /^[a-z0-9]+$/i.test(data);
+        return typeof data === STRING_TYPE
+            && HEX_REGEX.test(data);
     }
 
     public static isBase64(data: any): data is string {
-        return typeof data === "string"
-            && /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(data);
+        return typeof data === STRING_TYPE
+            && BASE64_REGEX.test(data);
     }
 
     public static isBase64Url(data: any): data is string {
-        return typeof data === "string"
-            && /^[a-zA-Z0-9-_]+$/i.test(data);
+        return typeof data === STRING_TYPE
+            && BASE64URL_REGEX.test(data);
     }
 
     public static ToString(buffer: BufferSource, enc: BufferEncoding = "utf8") {
@@ -126,6 +132,11 @@ export class Convert {
         }
     }
 
+    /**
+     * Converts byte array to Base64 encoded string.
+     * @param buffer - Byte array to encode.
+     * @returns Base64 string.
+     */
     public static ToBase64(buffer: BufferSource): string {
         const buf = BufferSourceConverter.toUint8Array(buffer);
         if (typeof btoa !== "undefined") {
@@ -136,6 +147,11 @@ export class Convert {
         }
     }
 
+    /**
+     * Converts byte array to Base64 encoded string.
+     * @param base64 - Base64 encoded string.
+     * @returns Byte array.
+     */
     public static FromBase64(base64: string): ArrayBuffer {
         const formatted = this.formatString(base64);
         if (!formatted) {
@@ -153,6 +169,11 @@ export class Convert {
         }
     }
 
+    /**
+     * Converts Base64Url encoded string to byte array.
+     * @param base64url - Base64Url encoded string.
+     * @returns Byte array.
+     */
     public static FromBase64Url(base64url: string): ArrayBuffer {
         const formatted = this.formatString(base64url);
         if (!formatted) {
@@ -166,12 +187,23 @@ export class Convert {
         return this.FromBase64(this.Base64Padding(formatted.replace(/\-/g, "+").replace(/\_/g, "/")));
     }
 
+    /**
+     * Converts byte array to Base64Url encoded string.
+     * @param data - Byte array to encode.
+     * @returns Base64Url encoded string.
+     */
     public static ToBase64Url(data: BufferSource): string {
         return this.ToBase64(data).replace(/\+/g, "-").replace(/\//g, "_").replace(/\=/g, "");
     }
 
     protected static DEFAULT_UTF8_ENCODING: TextEncoding = "utf8";
 
+    /**
+     * Converts JavaScript string to ArrayBuffer using specified encoding.
+     * @param text - JavaScript string to convert.
+     * @param encoding - Encoding to use. Default is 'utf8'.
+     * @returns ArrayBuffer representing input string.
+     */
     public static FromUtf8String(text: string, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): ArrayBuffer {
         switch (encoding) {
             case "ascii":
@@ -189,6 +221,12 @@ export class Convert {
         }
     }
 
+    /**
+     * Converts ArrayBuffer to JavaScript string using specified encoding.
+     * @param buffer - Buffer to convert.
+     * @param encoding - Encoding to use. Default is 'utf8'.
+     * @returns JavaScript string derived from input buffer.
+     */
     public static ToUtf8String(buffer: BufferSource, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): string {
         switch (encoding) {
             case "ascii":
@@ -206,15 +244,27 @@ export class Convert {
         }
     }
 
+    /**
+     * Converts binary string to ArrayBuffer.
+     * @param text - Binary string.
+     * @returns Byte array.
+     */
     public static FromBinary(text: string): ArrayBuffer {
         const stringLength = text.length;
         const resultView = new Uint8Array(stringLength);
+
         for (let i = 0; i < stringLength; i++) {
             resultView[i] = text.charCodeAt(i);
         }
+
         return resultView.buffer;
     }
 
+    /**
+     * Converts buffer to binary string.
+     * @param buffer - Input buffer.
+     * @returns Binary string.
+     */
     public static ToBinary(buffer: BufferSource): string {
         const buf = BufferSourceConverter.toUint8Array(buffer);
 
@@ -233,14 +283,18 @@ export class Convert {
      */
     public static ToHex(buffer: BufferSource): string {
         const buf = BufferSourceConverter.toUint8Array(buffer);
-        const splitter = "";
-        const res: string[] = [];
+        let result = "";
         const len = buf.length;
+
         for (let i = 0; i < len; i++) {
-            const char = buf[i].toString(16).padStart(2, "0");
-            res.push(char);
+            const byte = buf[i];
+            if (byte < 16) {
+                result += "0";
+            }
+            result += byte.toString(16);
         }
-        return res.join(splitter);
+
+        return result;
     }
 
     /**

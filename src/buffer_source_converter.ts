@@ -25,6 +25,9 @@ export class BufferSourceConverter {
    * Converts incoming buffer source into ArrayBuffer
    * @param data Buffer source
    * @returns ArrayBuffer representation of data
+   * @remarks If incoming data is ArrayBuffer then it returns it without copying,
+   * otherwise it copies data into new ArrayBuffer because incoming data can be
+   * ArrayBufferView with offset and length which is not equal to buffer length
    */
   public static toArrayBuffer(data: BufferSource): ArrayBuffer {
     if (this.isArrayBuffer(data)) {
@@ -32,6 +35,11 @@ export class BufferSourceConverter {
     }
     if (data.byteLength === data.buffer.byteLength) {
       // if view is not offset return it's buffer without copying
+      return data.buffer;
+    }
+
+    // don't copy ArrayBufferView to ArrayBuffer if it's not needed
+    if (data.byteOffset === 0 && data.byteLength === data.buffer.byteLength) {
       return data.buffer;
     }
 
@@ -54,7 +62,7 @@ export class BufferSourceConverter {
    * @returns Specified ArrayBufferView
    */
   public static toView<T extends ArrayBufferView>(data: BufferSource, type: ArrayBufferViewConstructor<T>): T {
-    if (data.constructor === type) {
+    if (data instanceof type) {
       return data;
     }
     if (this.isArrayBuffer(data)) {
@@ -129,30 +137,46 @@ export class BufferSourceConverter {
    */
   public static concat<T extends ArrayBufferView>(buffers: BufferSource[], type: ArrayBufferViewConstructor<T>): T;
   public static concat(...args: any): BufferSource {
-    if (Array.isArray(args[0])) {
-      const buffers = args[0];
-      let size = 0;
-      for (const buffer of buffers) {
-        size += buffer.byteLength;
-      }
+    let buffers: BufferSource[];
 
-      const res = new Uint8Array(size);
-
-      let offset = 0;
-      for (const buffer of buffers) {
-        const view = this.toUint8Array(buffer);
-        res.set(view, offset);
-
-        offset += view.length;
-      }
-
-      if (args[1]) {
-        return this.toView(res, args[1]);
-      }
-      return res.buffer;
+    // If the first argument is an array and the second is not a function (constructor for ArrayBufferView),
+    // it's the single-array overload
+    if (Array.isArray(args[0]) && !(args[1] instanceof Function)) {
+      buffers = args[0];
+    } else if (Array.isArray(args[0]) && args[1] instanceof Function) {  // The third overload with type
+      buffers = args[0];
     } else {
-      return this.concat(args);
+      // Variable number of buffer arguments
+      if (args[args.length - 1] instanceof Function) {
+        // If the last argument is a constructor function, don't include it in buffers
+        buffers = args.slice(0, args.length - 1);
+      } else {
+        // Else, all arguments are buffers
+        buffers = args;
+      }
     }
-  }
 
+    // count total size
+    let size = 0;
+    for (const buffer of buffers) {
+      size += buffer.byteLength;
+    }
+
+    const res = new Uint8Array(size);
+
+    // copy all the buffers
+    let offset = 0;
+    for (const buffer of buffers) {
+      const view = this.toUint8Array(buffer);
+      res.set(view, offset);
+      offset += view.length;
+    }
+
+    // convert to specified type if needed
+    if (args[args.length - 1] instanceof Function) {
+      return this.toView(res, args[args.length - 1]);
+    }
+
+    return res.buffer;
+  }
 }

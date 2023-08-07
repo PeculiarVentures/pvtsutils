@@ -1,9 +1,12 @@
-import path from "path";
-import fs from "fs";
+import fs from "node:fs";
+import path from "node:path";
+import url from "node:url";
 import typescript from "rollup-plugin-typescript2";
 import dts from "rollup-plugin-dts";
-import pkg from "./package.json";
+import pkg from "./package.json" assert { type: "json" };
 
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const LICENSE = fs.readFileSync("LICENSE", { encoding: "utf-8" });
 const banner = [
   "/*!",

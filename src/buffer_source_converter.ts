@@ -43,7 +43,12 @@ export class BufferSourceConverter {
       return data.buffer;
     }
 
-    return this.toUint8Array(data).slice().buffer;
+    // passing explicit offset values to work around the surprising behavior of
+    // Buffer.prototype.slice:
+    // https://nodejs.org/api/buffer.html#buffers-and-typedarrays
+    return this.toUint8Array(data.buffer)
+      .slice(data.byteOffset, data.byteOffset + data.byteLength)
+      .buffer;
   }
 
   /**

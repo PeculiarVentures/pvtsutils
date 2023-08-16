@@ -1,5 +1,6 @@
 import * as assert from "assert";
 import { BufferSourceConverter, Convert } from "../src";
+import { Buffer } from "node:buffer";
 
 context("BufferSourceConverter", () => {
 
@@ -50,6 +51,17 @@ context("BufferSourceConverter", () => {
     assert.throws(() => {
       BufferSourceConverter.toArrayBuffer(source as any);
     }, TypeError);
+  });
+
+  context("toArrayBuffer", () => {
+
+    it("keeps slice offsets for Node.js buffer slices", () => {
+      const size = 3;
+      const slice = Buffer.from(vector).slice(0, size);
+      const data = BufferSourceConverter.toArrayBuffer(slice);
+      assert.equal(data.byteLength, size);
+    });
+
   });
 
   context("isBufferSource", () => {

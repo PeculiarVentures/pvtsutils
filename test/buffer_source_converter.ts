@@ -7,6 +7,33 @@ context("BufferSourceConverter", () => {
   const vectorHex = "1234567890abcdef";
   const vector = Convert.FromHex("1234567890abcdef");
 
+  context("toView", () => {
+
+    it("Buffer to Uint8Array", () => {
+      const data = BufferSourceConverter.toView(Buffer.from(vector), Uint8Array);
+      assert.strictEqual(data.constructor, Uint8Array);
+      assert.equal(data.buffer.byteLength, vector.byteLength);
+    });
+
+    it("Uint16Array to Uint8Array", () => {
+      const data = BufferSourceConverter.toView(new Uint16Array(vector), Uint8Array);
+      assert.strictEqual(data.constructor, Uint8Array);
+    });
+
+    it("Uint8Array with offset to Uint8Array", () => {
+      const data = BufferSourceConverter.toView(new Uint8Array(vector, 2, 4), Uint8Array);
+      assert.strictEqual(data.constructor, Uint8Array);
+      assert.equal(data.buffer.byteLength, vector.byteLength);
+    });
+
+    it("Uint8Array to Uint8Array", () => {
+      const a = new Uint8Array(vector);
+      const data = BufferSourceConverter.toView(a, Uint8Array);
+      assert.strictEqual(data, a);
+    });
+
+  });
+
   it("convert from Uint8Array", () => {
     const data = BufferSourceConverter.toUint8Array(new Uint8Array(vector));
     assert.strictEqual(Convert.ToHex(data), vectorHex);

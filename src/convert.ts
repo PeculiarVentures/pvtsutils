@@ -8,7 +8,7 @@ declare function atob(data: string): string;
 
 const STRING_TYPE = "string";
 
-const HEX_REGEX = /^[0-9a-f]+$/i;
+const HEX_REGEX = /^[0-9a-f\s]+$/i;
 const BASE64_REGEX = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
 const BASE64URL_REGEX = /^[a-zA-Z0-9-_]+$/;
 

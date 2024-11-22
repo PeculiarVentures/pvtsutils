@@ -77,6 +77,10 @@ describe("Convert", () => {
       const hex = Convert.ToHex(buf);
       assert.strictEqual(hex, "010203");
     });
+    it("decode with space and new line chars", () => {
+      const buf = Convert.FromHex(" 01\n02\r03 04\n");
+      assert.strictEqual(buf.byteLength, 4);
+    });
   });
 
   context("utf16", () => {
@@ -128,6 +132,9 @@ describe("Convert", () => {
     });
     it("wrong", () => {
       assert.strictEqual(Convert.isHex("1234567890ABCDEF!"), false);
+    });
+    it("spaces and new lines", () => {
+      assert.strictEqual(Convert.isHex("1234\n5678 90AB\rCDEF"), true);
     });
   });
 

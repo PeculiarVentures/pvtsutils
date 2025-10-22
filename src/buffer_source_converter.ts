@@ -3,7 +3,6 @@ export type BufferSource = ArrayBuffer | ArrayBufferView;
 export interface ArrayBufferViewConstructor<T extends ArrayBufferView> {
   readonly prototype: T;
   new(length: number): T;
-  // tslint:disable-next-line: unified-signatures
   new(array: ArrayLike<number> | ArrayBufferLike): T;
   new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): T;
 }
@@ -11,7 +10,6 @@ export interface ArrayBufferViewConstructor<T extends ArrayBufferView> {
 const ARRAY_BUFFER_NAME = "[object ArrayBuffer]";
 
 export class BufferSourceConverter {
-
   /**
    * Checks if incoming data is ArrayBuffer
    * @param data Data to be checked
@@ -71,7 +69,10 @@ export class BufferSourceConverter {
    * because incoming data can be ArrayBufferView with offset and length which is not equal
    * to buffer length
    */
-  public static toView<T extends ArrayBufferView>(data: BufferSource, type: ArrayBufferViewConstructor<T>): T {
+  public static toView<T extends ArrayBufferView>(
+    data: BufferSource,
+    type: ArrayBufferViewConstructor<T>,
+  ): T {
     if (data.constructor === type) {
       return data;
     }
@@ -145,15 +146,20 @@ export class BufferSourceConverter {
    * @param type ArrayBufferView constructor
    * @returns Concatenated buffer of specified type
    */
-  public static concat<T extends ArrayBufferView>(buffers: BufferSource[], type: ArrayBufferViewConstructor<T>): T;
+  public static concat<T extends ArrayBufferView>(
+    buffers: BufferSource[],
+    type: ArrayBufferViewConstructor<T>,
+  ): T;
   public static concat(...args: any): BufferSource {
     let buffers: BufferSource[];
 
-    // If the first argument is an array and the second is not a function (constructor for ArrayBufferView),
-    // it's the single-array overload
+    // If the first argument is an array and the second is not a
+    // function (constructor for ArrayBufferView), it's the single-array overload
     if (Array.isArray(args[0]) && !(args[1] instanceof Function)) {
       buffers = args[0];
-    } else if (Array.isArray(args[0]) && args[1] instanceof Function) {  // The third overload with type
+    } else if (Array.isArray(args[0])
+      && args[1] instanceof Function
+    ) { // The third overload with type
       buffers = args[0];
     } else {
       // Variable number of buffer arguments

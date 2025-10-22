@@ -1,8 +1,9 @@
 import * as assert from "assert";
-import { assign, combine, isEqual } from "../src";
+import {
+  assign, combine, isEqual,
+} from "../src";
 
 describe("helper", () => {
-
   it("assign", () => {
     const obj = assign({}, { a: 1 }, { b: 2 }, { b: 3 });
     assert.strictEqual(obj.a, 1);
@@ -23,7 +24,6 @@ describe("helper", () => {
   });
 
   context("isEqual", () => {
-
     it("empty buffer", () => {
       const b1 = new ArrayBuffer(1);
       const b2: any = null;
@@ -51,7 +51,5 @@ describe("helper", () => {
 
       assert.strictEqual(isEqual(b1, b2), true);
     });
-
   });
-
 });

@@ -2,7 +2,6 @@ import * as assert from "assert";
 import { Convert, isEqual } from "../src";
 
 describe("Convert", () => {
-
   ["utf8", "binary", "hex", "base64", "base64url"].forEach((enc) => {
     [
       new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]).buffer,
@@ -11,8 +10,8 @@ describe("Convert", () => {
       Convert.FromString("010203040506070809", "hex"),
       Convert.FromString("Awa=", "base64"),
       Convert.FromString("Aw_", "base64url"),
-      Buffer.from("text")
-    ].forEach((buf, index) => {
+      Buffer.from("text"),
+    ].forEach((buf) => {
       it(`Encoding ${enc} buf: 0x${Convert.ToHex(buf)}`, () => {
         const str = Convert.ToString(buf, enc);
         assert.strictEqual(typeof str, "string");
@@ -38,7 +37,6 @@ describe("Convert", () => {
       const res = Convert.ToString(buf);
       assert.strictEqual(str, res);
     });
-
   });
 
   context("base64", () => {
@@ -158,5 +156,4 @@ describe("Convert", () => {
       assert.strictEqual(Convert.isBase64Url("ABA$"), false);
     });
   });
-
 });

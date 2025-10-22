@@ -1,14 +1,12 @@
 import * as assert from "assert";
-import { BufferSourceConverter, Convert } from "../src";
 import { Buffer } from "node:buffer";
+import { BufferSourceConverter, Convert } from "../src";
 
 context("BufferSourceConverter", () => {
-
   const vectorHex = "1234567890abcdef";
   const vector = Convert.FromHex("1234567890abcdef");
 
   context("toView", () => {
-
     it("Buffer to Uint8Array", () => {
       const data = BufferSourceConverter.toView(Buffer.from(vector), Uint8Array);
       assert.strictEqual(data.constructor, Uint8Array);
@@ -31,7 +29,6 @@ context("BufferSourceConverter", () => {
       const data = BufferSourceConverter.toView(a, Uint8Array);
       assert.strictEqual(data, a);
     });
-
   });
 
   it("convert from Uint8Array", () => {
@@ -81,18 +78,15 @@ context("BufferSourceConverter", () => {
   });
 
   context("toArrayBuffer", () => {
-
     it("keeps slice offsets for Node.js buffer slices", () => {
       const size = 3;
       const slice = Buffer.from(vector).slice(0, size);
       const data = BufferSourceConverter.toArrayBuffer(slice);
       assert.equal(data.byteLength, size);
     });
-
   });
 
   context("isBufferSource", () => {
-
     it("ArrayBufferView", () => {
       assert.strictEqual(BufferSourceConverter.isBufferSource(new Uint16Array(0)), true);
     });
@@ -108,11 +102,9 @@ context("BufferSourceConverter", () => {
     it("Not BufferSource", () => {
       assert.strictEqual(BufferSourceConverter.isBufferSource([1, 2, 3, 4, 5, 6, 7]), false);
     });
-
   });
 
   context("isEqual", () => {
-
     it("not equal, the same length", () => {
       const a = new Uint8Array([1, 2, 3, 4, 5]);
       const b = new Uint8Array([1, 2, 3, 4, 6]);
@@ -136,7 +128,6 @@ context("BufferSourceConverter", () => {
       const res = BufferSourceConverter.isEqual(a, b);
       assert.strictEqual(res, true);
     });
-
   });
 
   context("concat", () => {
@@ -164,5 +155,4 @@ context("BufferSourceConverter", () => {
       assert.ok(res instanceof Uint8Array);
     });
   });
-
 });

@@ -10,7 +10,7 @@ const LICENSE = fs.readFileSync("LICENSE", { encoding: "utf-8" });
 const pkg = JSON.parse(fs.readFileSync("package.json", { encoding: "utf-8" }));
 const banner = [
   "/*!",
-  ...LICENSE.split("\n").map(o => ` * ${o}`),
+  ...LICENSE.split("\n").map((o) => ` * ${o}`),
   " */",
   "",
 ].join("\n");
@@ -30,7 +30,7 @@ export default [
             removeComments: true,
           },
           exclude: ["test/**/*.ts"],
-        }
+        },
       }),
     ],
     external: [...external],
@@ -51,15 +51,13 @@ export default [
     input,
     external: [...external],
     plugins: [
-      dts({
-        tsconfig: path.resolve(__dirname, "./tsconfig.json")
-      })
+      dts({ tsconfig: path.resolve(__dirname, "./tsconfig.json") }),
     ],
     output: [
       {
         banner,
         file: pkg.types,
-      }
-    ]
+      },
+    ],
   },
 ];

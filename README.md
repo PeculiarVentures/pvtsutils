@@ -1,5 +1,10 @@
 # @peculiar/utils
 
+[![npm version](https://img.shields.io/npm/v/%40peculiar%2Futils.svg)](https://www.npmjs.com/package/@peculiar/utils)
+[![Test](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/pvtsutils/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/pvtsutils?branch=master)
+[![License: MIT](https://img.shields.io/github/license/PeculiarVentures/pvtsutils.svg)](https://github.com/PeculiarVentures/pvtsutils/blob/master/LICENSE)
+
 Modern byte, text, converter registry, and PEM utilities for TypeScript projects.
 
 The package is designed around a modular v2 API:

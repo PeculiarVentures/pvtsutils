@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.build.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "removeComments": true,
+    "outDir": "build/esm",
+    "declaration": false,
+    "tsBuildInfoFile": "build/esm/.tsbuildinfo"
+  }
+}

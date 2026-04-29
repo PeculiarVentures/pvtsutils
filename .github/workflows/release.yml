@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release type"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: npm
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Validate package contents
+        run: npm pack --dry-run
+
+      - name: Configure git
+        run: |
+          git config user.name "release-bot"
+          git config user.email "release-bot@users.noreply.github.com"
+
+      - name: Bump version and create local tag
+        id: version
+        run: |
+          npm version "${{ inputs.version }}" -m "chore(release): v%s"
+
+          VERSION=$(node -p "require('./package.json').version")
+          MAJOR=$(node -p "require('./package.json').version.split('.')[0]")
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "release_tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "major_tag=v$MAJOR" >> "$GITHUB_OUTPUT"
+
+      - name: Publish to npm via Trusted Publisher
+        run: npm publish --access public
+
+      - name: Push commit and tag
+        run: |
+          git push origin HEAD:${{ github.event.repository.default_branch }}
+          git push origin "${{ steps.version.outputs.release_tag }}"
+
+      - name: Update major tag
+        run: |
+          git tag -f "${{ steps.version.outputs.major_tag }}" "${{ steps.version.outputs.release_tag }}"
+          git push origin "${{ steps.version.outputs.major_tag }}" --force
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.release_tag }}" \
+            --verify-tag \
+            --title "${{ steps.version.outputs.release_tag }}" \
+            --generate-notes

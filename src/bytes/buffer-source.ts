@@ -20,6 +20,21 @@ function bytesPerElement(type: ViewConstructor): number {
   return value ?? 1;
 }
 
+function isArrayBufferViewLike(value: unknown): value is ArrayBufferViewLike {
+  if (ArrayBuffer.isView(value)) {
+    return true;
+  }
+
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const view = value as Partial<ArrayBufferViewLike>;
+  return typeof view.byteOffset === "number"
+    && typeof view.byteLength === "number"
+    && isArrayBufferLike(view.buffer);
+}
+
 function copyBytes(data: BufferSourceLike): Uint8Array {
   const view = toUint8Array(data);
   const copy = new Uint8Array(view.byteLength);
@@ -44,7 +59,7 @@ export function isArrayBufferLike(value: unknown): value is ArrayBufferLike {
 
 /** Checks whether a value is an ArrayBufferView. */
 export function isArrayBufferView(value: unknown): value is ArrayBufferViewLike {
-  return ArrayBuffer.isView(value);
+  return isArrayBufferViewLike(value);
 }
 
 /** Checks whether a value can be treated as a buffer source. */

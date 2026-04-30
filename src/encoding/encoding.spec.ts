@@ -39,6 +39,20 @@ describe("encoding", () => {
     );
   });
 
+  it("encodes structural ArrayBufferView-like values", () => {
+    class OctetStringLike {
+      public buffer = new Uint8Array([0, 15, 16, 255]).buffer;
+      public readonly byteOffset = 0;
+
+      public readonly byteLength = this.buffer.byteLength;
+    }
+
+    const value = new OctetStringLike();
+
+    expect(encoding.hex.encode(value as never)).toBe("000f10ff");
+    expect(encoding.hex.is(value as never)).toBe(false);
+  });
+
   it("handles base64 helpers with and without Buffer", () => {
     const payload = new Uint8Array([104, 105]);
 

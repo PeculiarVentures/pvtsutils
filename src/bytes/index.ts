@@ -2,6 +2,7 @@
 export type {
   ArrayBufferViewLike,
   ArrayBufferViewConstructor,
+  BufferSource,
   BufferSourceLike,
   DataViewConstructorLike,
   StrictBufferSource,

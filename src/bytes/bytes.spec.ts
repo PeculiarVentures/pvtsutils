@@ -17,7 +17,7 @@ import {
 import { concat, concatToUint8Array } from "./concat.js";
 import { equal } from "./equal.js";
 import { compare, copy, endsWith, includes, indexOf, lastIndexOf, slice, startsWith, tail } from "./sequence.js";
-import type { BufferSourceLike } from "./types.js";
+import type { BufferSource, BufferSourceLike } from "./types.js";
 import * as bytesApi from "./index.js";
 
 function* makeBuffers(): Iterable<Uint8Array> {
@@ -46,6 +46,11 @@ describe("bytes", () => {
       expect(isArrayBufferLike(sharedBuffer)).toBe(true);
       expect(isBufferSource(sharedBuffer)).toBe(true);
     }
+  });
+
+  it("preserves the historical BufferSource type alias", () => {
+    expectTypeOf<BufferSource>().toEqualTypeOf<BufferSourceLike>();
+    expectTypeOf<BufferSourceLike>().toMatchTypeOf<BufferSource>();
   });
 
   it("normalizes buffer sources to Uint8Array views", () => {

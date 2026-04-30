@@ -8,6 +8,9 @@ export interface ArrayBufferViewLike<TBuffer extends ArrayBufferLike = ArrayBuff
 /** A buffer source backed by either an ArrayBuffer-like value or a view. */
 export type BufferSourceLike = ArrayBufferLike | ArrayBufferViewLike;
 
+/** Historical BufferSource alias preserved for compatibility. */
+export type BufferSource = BufferSourceLike;
+
 /** A strict buffer source limited to ArrayBuffer and ArrayBuffer-backed views. */
 export type StrictBufferSource = ArrayBuffer | ArrayBufferViewLike<ArrayBuffer>;
 

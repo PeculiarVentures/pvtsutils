@@ -51,6 +51,7 @@ describe("legacy", () => {
     expect(Convert.ToBinary(payload)).toBe("hi");
     expect(Array.from(new Uint8Array(Convert.FromBinary("hi")))).toEqual([104, 105]);
     expect(Convert.ToHex(new Uint8Array([0, 15]))).toBe("000f");
+    expect(Array.from(new Uint8Array(Convert.FromString("abc", "hex")))).toEqual([10, 188]);
     expect(Array.from(new Uint8Array(Convert.FromHex("abc")))).toEqual([10, 188]);
     expect(Convert.ToUtf16String(new Uint8Array([0, 65, 1, 0]))).toBe("AĀ");
     expect(Array.from(new Uint8Array(Convert.FromUtf16String("AĀ", true)))).toEqual([65, 0, 0, 1]);

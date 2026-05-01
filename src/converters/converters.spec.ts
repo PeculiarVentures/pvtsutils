@@ -98,6 +98,7 @@ describe("converters", () => {
     expect(convert.toBase64Url(payload)).toBe("aGk");
     expect(Array.from(new Uint8Array(convert.fromBase64Url("aGk")))).toEqual([104, 105]);
     expect(convert.toHex(new Uint8Array([0, 15]))).toBe("000f");
+    expect(Array.from(new Uint8Array(convert.fromString("abc", "hex")))).toEqual([10, 188]);
     expect(Array.from(new Uint8Array(convert.fromHex("abc")))).toEqual([10, 188]);
     expect(convert.toBinary(payload)).toBe("hi");
     expect(Array.from(new Uint8Array(convert.fromBinary("hi")))).toEqual([104, 105]);

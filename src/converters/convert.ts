@@ -109,6 +109,10 @@ function detect<TName extends string = string>(text: string, options?: DetectOpt
   return defaultConverterRegistry.detect(text, options);
 }
 
+function normalizeEncodingName(encoding: BufferEncoding): string {
+  return encoding.toLowerCase();
+}
+
 /** Converter helpers for common text and binary encodings. */
 export const convert: ConvertFacade = {
   encode,
@@ -135,6 +139,9 @@ export const convert: ConvertFacade = {
 
   /** Converts a string to bytes using a known encoding. */
   fromString(text: string, encoding: BufferEncoding = "utf8"): ArrayBufferLike {
+    if (normalizeEncodingName(encoding) === "hex") {
+      return toArrayBuffer(hex.decode(text, { allowOddLength: true }));
+    }
     return toArrayBuffer(decode(encoding, text));
   },
 

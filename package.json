@@ -8,39 +8,74 @@
   "types": "./build/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./build/types/index.d.ts",
-      "import": "./build/esm/index.js",
-      "require": "./build/cjs/index.js"
+      "import": {
+        "types": "./build/types/index.d.ts",
+        "default": "./build/esm/index.js"
+      },
+      "require": {
+        "types": "./build/types-cjs/index.d.ts",
+        "default": "./build/cjs/index.js"
+      }
     },
     "./bytes": {
-      "types": "./build/types/bytes/index.d.ts",
-      "import": "./build/esm/bytes/index.js",
-      "require": "./build/cjs/bytes/index.js"
+      "import": {
+        "types": "./build/types/bytes/index.d.ts",
+        "default": "./build/esm/bytes/index.js"
+      },
+      "require": {
+        "types": "./build/types-cjs/bytes/index.d.ts",
+        "default": "./build/cjs/bytes/index.js"
+      }
     },
     "./encoding": {
-      "types": "./build/types/encoding/index.d.ts",
-      "import": "./build/esm/encoding/index.js",
-      "require": "./build/cjs/encoding/index.js"
+      "import": {
+        "types": "./build/types/encoding/index.d.ts",
+        "default": "./build/esm/encoding/index.js"
+      },
+      "require": {
+        "types": "./build/types-cjs/encoding/index.d.ts",
+        "default": "./build/cjs/encoding/index.js"
+      }
     },
     "./encoding/*": {
-      "types": "./build/types/encoding/*.d.ts",
-      "import": "./build/esm/encoding/*.js",
-      "require": "./build/cjs/encoding/*.js"
+      "import": {
+        "types": "./build/types/encoding/*.d.ts",
+        "default": "./build/esm/encoding/*.js"
+      },
+      "require": {
+        "types": "./build/types-cjs/encoding/*.d.ts",
+        "default": "./build/cjs/encoding/*.js"
+      }
     },
     "./converters": {
-      "types": "./build/types/converters/index.d.ts",
-      "import": "./build/esm/converters/index.js",
-      "require": "./build/cjs/converters/index.js"
+      "import": {
+        "types": "./build/types/converters/index.d.ts",
+        "default": "./build/esm/converters/index.js"
+      },
+      "require": {
+        "types": "./build/types-cjs/converters/index.d.ts",
+        "default": "./build/cjs/converters/index.js"
+      }
     },
     "./pem": {
-      "types": "./build/types/pem/index.d.ts",
-      "import": "./build/esm/pem/index.js",
-      "require": "./build/cjs/pem/index.js"
+      "import": {
+        "types": "./build/types/pem/index.d.ts",
+        "default": "./build/esm/pem/index.js"
+      },
+      "require": {
+        "types": "./build/types-cjs/pem/index.d.ts",
+        "default": "./build/cjs/pem/index.js"
+      }
     },
     "./legacy": {
-      "types": "./build/types/legacy/index.d.ts",
-      "import": "./build/esm/legacy/index.js",
-      "require": "./build/cjs/legacy/index.js"
+      "import": {
+        "types": "./build/types/legacy/index.d.ts",
+        "default": "./build/esm/legacy/index.js"
+      },
+      "require": {
+        "types": "./build/types-cjs/legacy/index.d.ts",
+        "default": "./build/cjs/legacy/index.js"
+      }
     },
     "./package.json": "./package.json"
   },
@@ -49,6 +84,8 @@
     "build/cjs/package.json",
     "build/esm/**/*.js",
     "build/types/**/*.d.ts",
+    "build/types-cjs/**/*.d.ts",
+    "build/types-cjs/package.json",
     "README.md",
     "LICENSE"
   ],
@@ -60,7 +97,7 @@
     "coverage": "vitest run --coverage",
     "clear": "rimraf build",
     "rebuild": "npm run clear && npm run build",
-    "build": "node scripts/prune-legacy-build-outputs.mjs && tsc -p tsconfig.build.types.json && tsc -p tsconfig.build.esm.json && tsc -p tsconfig.build.cjs.json && node scripts/write-cjs-package-json.mjs",
+    "build": "node scripts/prune-legacy-build-outputs.mjs && tsc -p tsconfig.build.types.json && tsc -p tsconfig.build.types.cjs.json && tsc -p tsconfig.build.esm.json && tsc -p tsconfig.build.cjs.json && node scripts/write-cjs-package-json.mjs",
     "prepack": "npm run build",
     "publish:manual": "npm run check && npm run build && npm publish --ignore-scripts",
     "lint:check": "eslint . --fix-dry-run",

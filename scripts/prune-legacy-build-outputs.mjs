@@ -6,7 +6,7 @@ function pruneLegacyOutputs(dirPath) {
     const entryPath = join(dirPath, entry.name);
 
     if (entry.isDirectory()) {
-      if (entry.name === "types") {
+      if (entry.name === "types" || entry.name === "types-cjs") {
         continue;
       }
       pruneLegacyOutputs(entryPath);

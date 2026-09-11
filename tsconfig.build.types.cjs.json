@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.build.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "module": "commonjs",
+    "moduleResolution": "node10",
+    "ignoreDeprecations": "6.0",
+    "outDir": "build/types-cjs",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "tsBuildInfoFile": "build/types-cjs/.tsbuildinfo"
+  }
+}

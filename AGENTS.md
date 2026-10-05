@@ -28,7 +28,7 @@
 - Use `vitest` for tests.
 - Put co-located tests next to source files as `*.spec.ts`.
 - Put shared or cross-cutting cases in `tests/*.test.ts`.
-- Run `npm run check` before finishing any code change task.
+- Run `npm run lint`, `npm run format:check`, `npm run typecheck`, and `npm test` before finishing any code change task.
 - `npm test` must run once and exit.
 - `npm run coverage` must produce coverage output without counting test files.
 

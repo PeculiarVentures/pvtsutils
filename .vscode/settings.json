@@ -1,20 +1,19 @@
 {
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
+  "files.trimTrailingWhitespace": true,
   "[typescript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
+  "oxc.enable": true,
   "js/ts.tsdk.path": "node_modules/typescript/lib",
   "files.exclude": {
     "**/.git": true,

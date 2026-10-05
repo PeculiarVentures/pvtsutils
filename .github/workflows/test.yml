@@ -36,6 +36,9 @@ jobs:
       - name: Validate package types and exports
         run: npm run validate:package-types
 
+      - name: Check generated package exports are committed
+        run: git diff --exit-code package.json
+
       - name: Run test with coverage
         run: npm run coverage
 

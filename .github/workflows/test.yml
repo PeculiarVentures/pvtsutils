@@ -33,6 +33,9 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
+      - name: Validate package types and exports
+        run: npm run validate:package-types
+
       - name: Run test with coverage
         run: npm run coverage
 

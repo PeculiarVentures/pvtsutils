@@ -6,125 +6,31 @@
   "main": "./build/index.cjs",
   "module": "./build/index.mjs",
   "types": "./build/index.d.cts",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "module": {
-        "types": "./build/index.d.mts",
-        "default": "./build/index.mjs"
-      },
-      "default": {
-        "node": {
-          "types": "./build/index.d.cts",
-          "default": "./build/index.cjs"
-        },
-        "import": {
-          "types": "./build/index.d.mts"
-        },
-        "types": "./build/index.d.cts",
-        "default": "./build/index.cjs"
-      }
+      "import": "./build/index.mjs",
+      "require": "./build/index.cjs"
     },
     "./bytes": {
-      "module": {
-        "types": "./build/bytes/index.d.mts",
-        "default": "./build/bytes/index.mjs"
-      },
-      "default": {
-        "node": {
-          "types": "./build/bytes/index.d.cts",
-          "default": "./build/bytes/index.cjs"
-        },
-        "import": {
-          "types": "./build/bytes/index.d.mts"
-        },
-        "types": "./build/bytes/index.d.cts",
-        "default": "./build/bytes/index.cjs"
-      }
-    },
-    "./encoding": {
-      "module": {
-        "types": "./build/encoding/index.d.mts",
-        "default": "./build/encoding/index.mjs"
-      },
-      "default": {
-        "node": {
-          "types": "./build/encoding/index.d.cts",
-          "default": "./build/encoding/index.cjs"
-        },
-        "import": {
-          "types": "./build/encoding/index.d.mts"
-        },
-        "types": "./build/encoding/index.d.cts",
-        "default": "./build/encoding/index.cjs"
-      }
-    },
-    "./encoding/*": {
-      "module": {
-        "types": "./build/encoding/*.d.mts",
-        "default": "./build/encoding/*.mjs"
-      },
-      "default": {
-        "node": {
-          "types": "./build/encoding/*.d.cts",
-          "default": "./build/encoding/*.cjs"
-        },
-        "import": {
-          "types": "./build/encoding/*.d.mts"
-        },
-        "types": "./build/encoding/*.d.cts",
-        "default": "./build/encoding/*.cjs"
-      }
+      "import": "./build/bytes.mjs",
+      "require": "./build/bytes.cjs"
     },
     "./converters": {
-      "module": {
-        "types": "./build/converters/index.d.mts",
-        "default": "./build/converters/index.mjs"
-      },
-      "default": {
-        "node": {
-          "types": "./build/converters/index.d.cts",
-          "default": "./build/converters/index.cjs"
-        },
-        "import": {
-          "types": "./build/converters/index.d.mts"
-        },
-        "types": "./build/converters/index.d.cts",
-        "default": "./build/converters/index.cjs"
-      }
+      "import": "./build/converters.mjs",
+      "require": "./build/converters.cjs"
     },
-    "./pem": {
-      "module": {
-        "types": "./build/pem/index.d.mts",
-        "default": "./build/pem/index.mjs"
-      },
-      "default": {
-        "node": {
-          "types": "./build/pem/index.d.cts",
-          "default": "./build/pem/index.cjs"
-        },
-        "import": {
-          "types": "./build/pem/index.d.mts"
-        },
-        "types": "./build/pem/index.d.cts",
-        "default": "./build/pem/index.cjs"
-      }
+    "./encoding": {
+      "import": "./build/encoding.mjs",
+      "require": "./build/encoding.cjs"
     },
     "./legacy": {
-      "module": {
-        "types": "./build/legacy/index.d.mts",
-        "default": "./build/legacy/index.mjs"
-      },
-      "default": {
-        "node": {
-          "types": "./build/legacy/index.d.cts",
-          "default": "./build/legacy/index.cjs"
-        },
-        "import": {
-          "types": "./build/legacy/index.d.mts"
-        },
-        "types": "./build/legacy/index.d.cts",
-        "default": "./build/legacy/index.cjs"
-      }
+      "import": "./build/legacy.mjs",
+      "require": "./build/legacy.cjs"
+    },
+    "./pem": {
+      "import": "./build/pem.mjs",
+      "require": "./build/pem.cjs"
     },
     "./package.json": "./package.json"
   },
@@ -185,6 +91,7 @@
     "@vitest/coverage-v8": "^4.1.5",
     "oxfmt": "^0.63.0",
     "oxlint": "^1.86.0",
+    "publint": "^0.3.25",
     "tsdown": "^0.23.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"

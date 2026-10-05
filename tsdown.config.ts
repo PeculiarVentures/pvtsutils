@@ -21,5 +21,4 @@ export default defineConfig({
   },
   outDir: "build",
   tsconfig: "tsconfig.json",
-  publint: true,
 });

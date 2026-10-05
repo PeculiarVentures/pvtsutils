@@ -8,10 +8,12 @@
 - `src/converters/` contains the converter registry and default adapters.
 - `src/pem/` contains PEM parsing and formatting helpers.
 - `src/legacy/` keeps the compatibility layer for older APIs.
+- `src/namespaces/` holds internal `export *` modules used as targets for `export * as` re-exports, so the bundler-generated namespace objects do not leak extra exports into public subpaths. Point new namespace re-exports here instead of at the public module.
 
 ## Build And Release
 
-- Build with `npm run build`; the project now uses `tsc -b` and writes ESM/CJS JS output plus declarations under `build/`.
+- Build with `npm run build`; tsdown (`tsdown.config.ts`) writes an unbundled tree under `build/` that mirrors `src/`, with `.mjs`/`.cjs` output and `.d.mts`/`.d.cts` declarations.
+- Package exports use `module` (ESM, for bundlers) and `default` (CJS) conditions so Node always loads a single copy of the package.
 - Keep published paths in `package.json` in sync with the actual build output.
 - Do not commit generated build artifacts.
 

@@ -1,14 +1,5 @@
 import type { ArrayBufferViewConstructor, ArrayBufferViewLike, BufferSourceLike, ViewConstructor } from "../bytes/index.js";
-import {
-  concat,
-  equal,
-  isArrayBuffer,
-  isArrayBufferView,
-  isBufferSource,
-  toArrayBuffer,
-  toUint8Array,
-  toView,
-} from "../bytes/index.js";
+import { concat, equal, isArrayBuffer, isArrayBufferView, isBufferSource, toArrayBuffer, toUint8Array, toView } from "../bytes/index.js";
 
 /** Legacy static helpers for buffer source conversion.
  * @deprecated Use functions from `@peculiar/utils/bytes` instead.
@@ -30,10 +21,7 @@ export class BufferSourceConverter {
   }
 
   /** Converts buffer data into the requested view type. */
-  public static toView<T extends ArrayBufferViewLike>(
-    data: BufferSourceLike,
-    type: ViewConstructor<T>,
-  ): T {
+  public static toView<T extends ArrayBufferViewLike>(data: BufferSourceLike, type: ViewConstructor<T>): T {
     return toView(data, type);
   }
 
@@ -55,19 +43,14 @@ export class BufferSourceConverter {
   /** Concatenates buffer sources into an ArrayBuffer or a typed view. */
   public static concat(...buffers: BufferSourceLike[]): ArrayBufferLike;
   public static concat(buffers: BufferSourceLike[]): ArrayBufferLike;
-  public static concat<T extends ArrayBufferViewLike>(
-    buffers: BufferSourceLike[],
-    type: ArrayBufferViewConstructor<T>,
-  ): T;
+  public static concat<T extends ArrayBufferViewLike>(buffers: BufferSourceLike[], type: ArrayBufferViewConstructor<T>): T;
   public static concat<T extends ArrayBufferViewLike>(
     first: BufferSourceLike | BufferSourceLike[],
     second?: BufferSourceLike | ArrayBufferViewConstructor<T>,
     ...rest: BufferSourceLike[]
   ): ArrayBufferLike | T {
     if (Array.isArray(first)) {
-      return typeof second === "function"
-        ? concat(first, second as ArrayBufferViewConstructor<T>)
-        : concat(first);
+      return typeof second === "function" ? concat(first, second as ArrayBufferViewConstructor<T>) : concat(first);
     }
 
     const buffers = [first, second, ...rest].filter(Boolean) as BufferSourceLike[];

@@ -50,9 +50,7 @@ describe("converters", () => {
   it("guards against duplicate and invalid registrations", () => {
     const registry = createConverterRegistry([demoConverter]);
 
-    expect(() => registry.register({ ...demoConverter, name: "demo" })).toThrow(
-      "Converter 'demo' is already registered",
-    );
+    expect(() => registry.register({ ...demoConverter, name: "demo" })).toThrow("Converter 'demo' is already registered");
     expect(() => registry.register({ ...demoConverter, name: " " })).toThrow(TypeError);
 
     const overridden = registry.register(
@@ -70,16 +68,7 @@ describe("converters", () => {
   });
 
   it("exposes the built-in converters through the default registry and facade", () => {
-    expect(defaultConverters.map((converter) => converter.name)).toEqual([
-      "binary",
-      "hex",
-      "base64",
-      "base64url",
-      "utf8",
-      "utf16be",
-      "utf16le",
-      "pem",
-    ]);
+    expect(defaultConverters.map((converter) => converter.name)).toEqual(["binary", "hex", "base64", "base64url", "utf8", "utf16be", "utf16le", "pem"]);
     expect(defaultConverterRegistry.get("latin1")).toBe(defaultConverters[0]);
     expect(defaultConverterRegistry.get("b64url")).toBe(defaultConverters[3]);
     expect(defaultConverterRegistry.get("utf16")).toBe(defaultConverters[5]);
@@ -102,18 +91,8 @@ describe("converters", () => {
     expect(Array.from(new Uint8Array(convert.fromHex("abc")))).toEqual([10, 188]);
     expect(convert.toBinary(payload)).toBe("hi");
     expect(Array.from(new Uint8Array(convert.fromBinary("hi")))).toEqual([104, 105]);
-    expect(convert.toUtf8String(new Uint8Array([71, 114, 195, 188, 195, 159, 101]))).toBe(
-      "Grüße",
-    );
-    expect(Array.from(new Uint8Array(convert.fromUtf8String("Grüße")))).toEqual([
-      71,
-      114,
-      195,
-      188,
-      195,
-      159,
-      101,
-    ]);
+    expect(convert.toUtf8String(new Uint8Array([71, 114, 195, 188, 195, 159, 101]))).toBe("Grüße");
+    expect(Array.from(new Uint8Array(convert.fromUtf8String("Grüße")))).toEqual([71, 114, 195, 188, 195, 159, 101]);
     expect(convert.toUtf16String(new Uint8Array([0, 65, 1, 0]))).toBe("AĀ");
     expect(Array.from(new Uint8Array(convert.fromUtf16String("AĀ", true)))).toEqual([65, 0, 0, 1]);
     expect(convert.isHex("0a")).toBe(true);
@@ -147,9 +126,7 @@ describe("converters", () => {
     expect(() => registry.format("base64", new Uint8Array([1]), {} as never)).toThrow("Converter 'base64' does not support format()");
 
     expect(registry.transcode("AQID", { from: "base64", to: "hex", toOptions: hex.formats.colonUpper })).toBe("01:02:03");
-    expect(convert.transcode("AQID", { from: "base64", to: "pem", toOptions: { label: "DATA" } })).toBe(
-      "-----BEGIN DATA-----\nAQID\n-----END DATA-----\n",
-    );
+    expect(convert.transcode("AQID", { from: "base64", to: "pem", toOptions: { label: "DATA" } })).toBe("-----BEGIN DATA-----\nAQID\n-----END DATA-----\n");
 
     const ok = registry.tryDecode("hex", "0a0b");
     expect(ok).toEqual({ ok: true, bytes: new Uint8Array([10, 11]) });

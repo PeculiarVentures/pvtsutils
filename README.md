@@ -39,11 +39,11 @@ import { Convert } from "@peculiar/utils/legacy";
 import { bytes } from "@peculiar/utils";
 
 const offset = bytes.indexOf(new Uint8Array([0x25, 0x25, 0x45, 0x4f, 0x46]), "%%EOF", {
- encoding: "ascii",
+  encoding: "ascii",
 });
 
 const suffix = bytes.endsWith(new Uint8Array([0x25, 0x25, 0x45, 0x4f, 0x46]), "%%EOF", {
- encoding: "ascii",
+  encoding: "ascii",
 });
 ```
 
@@ -55,13 +55,13 @@ import { lastIndexOf } from "@peculiar/utils/bytes";
 const tailStart = Math.max(0, pdf.byteLength - 4096);
 
 const offset = lastIndexOf(pdf, "startxref", {
- encoding: "ascii",
- start: pdf.byteLength,
- end: tailStart,
+  encoding: "ascii",
+  start: pdf.byteLength,
+  end: tailStart,
 });
 
 if (offset === -1) {
- throw new Error("PDF startxref marker not found");
+  throw new Error("PDF startxref marker not found");
 }
 ```
 
@@ -73,13 +73,10 @@ import { lastIndexOf, tail } from "@peculiar/utils/bytes";
 const pdfTail = tail(pdf, 4096);
 
 const localOffset = lastIndexOf(pdfTail, "startxref", {
- encoding: "ascii",
+  encoding: "ascii",
 });
 
-const offset =
- localOffset === -1
-    ? -1
-    : pdf.byteLength - pdfTail.byteLength + localOffset;
+const offset = localOffset === -1 ? -1 : pdf.byteLength - pdfTail.byteLength + localOffset;
 ```
 
 ### Check Prefixes And Suffixes
@@ -99,7 +96,7 @@ import { bytes } from "@peculiar/utils";
 const result = bytes.compare(a, b);
 
 if (result === 0) {
- console.log("equal");
+  console.log("equal");
 }
 ```
 
@@ -125,18 +122,18 @@ import { convert } from "@peculiar/utils/converters";
 import { hex } from "@peculiar/utils/encoding";
 
 const pemText = convert.transcode("AQID", {
- from: "base64",
- to: "pem",
- toOptions: {
-  label: "CERTIFICATE",
- },
+  from: "base64",
+  to: "pem",
+  toOptions: {
+    label: "CERTIFICATE",
+  },
 });
 
 const hexText = convert.transcode(pemText, {
- from: "pem",
- fromOptions: { label: "CERTIFICATE" },
- to: "hex",
- toOptions: hex.formats.colonUpper,
+  from: "pem",
+  fromOptions: { label: "CERTIFICATE" },
+  to: "hex",
+  toOptions: hex.formats.colonUpper,
 });
 ```
 
@@ -156,11 +153,11 @@ hex.decode("0x0102030405060708090a0b0c");
 
 hex.encode(new Uint8Array([1, 2, 3, 4]), hex.formats.colonUpper);
 hex.encode(new Uint8Array([1, 2, 3, 4]), {
- prefix: "0x",
- group: {
-  size: 2,
-  separator: " ",
- },
+  prefix: "0x",
+  group: {
+    size: 2,
+    separator: " ",
+  },
 });
 ```
 
@@ -211,8 +208,8 @@ const block = pem.find(text, "CERTIFICATE");
 const matches = pem.findAll(text, "CERTIFICATE");
 
 const bundle = pem.encodeMany([
- { label: "CERTIFICATE", data: new Uint8Array([1, 2, 3]) },
- { label: "PRIVATE KEY", data: new Uint8Array([4, 5, 6]) },
+  { label: "CERTIFICATE", data: new Uint8Array([1, 2, 3]) },
+  { label: "PRIVATE KEY", data: new Uint8Array([4, 5, 6]) },
 ]);
 ```
 
@@ -224,13 +221,13 @@ import { convert } from "@peculiar/utils/converters";
 const result = convert.tryDecode("hex", "01:02:03");
 
 if (result.ok) {
- console.log(result.bytes);
+  console.log(result.bytes);
 } else {
- console.error(result.error);
+  console.error(result.error);
 }
 
 const candidates = convert.detect("-----BEGIN DATA-----\nAQID\n-----END DATA-----\n", {
- formats: ["pem", "base64", "hex"],
+  formats: ["pem", "base64", "hex"],
 });
 ```
 
@@ -244,14 +241,14 @@ import { createConverterRegistry, defaultConverters } from "@peculiar/utils/conv
 const registry = createConverterRegistry(defaultConverters);
 
 registry.register({
- name: "base58btc",
- aliases: ["b58"],
- encode(data) {
-  return base58btcEncode(data);
- },
- decode(text) {
-  return base58btcDecode(text);
- },
+  name: "base58btc",
+  aliases: ["b58"],
+  encode(data) {
+    return base58btcEncode(data);
+  },
+  decode(text) {
+    return base58btcDecode(text);
+  },
 });
 ```
 
@@ -265,7 +262,7 @@ Built-in converters expose typed options through the registry facade.
 import { convert } from "@peculiar/utils/converters";
 
 convert.encode("hex", new Uint8Array([1, 2, 3]), {
- case: "upper",
+  case: "upper",
 });
 ```
 
@@ -273,7 +270,7 @@ Wrong options are rejected by TypeScript:
 
 ```ts
 convert.encode("hex", new Uint8Array([1, 2, 3]), {
- label: "CERTIFICATE",
+  label: "CERTIFICATE",
 });
 ```
 
@@ -281,12 +278,12 @@ Custom converters can extend the options map via module augmentation:
 
 ```ts
 declare module "@peculiar/utils/converters" {
- interface ConverterOptionsMap {
-  base58btc: {
-   encode: Base58EncodeOptions;
-   decode: Base58DecodeOptions;
-  };
- }
+  interface ConverterOptionsMap {
+    base58btc: {
+      encode: Base58EncodeOptions;
+      decode: Base58DecodeOptions;
+    };
+  }
 }
 ```
 

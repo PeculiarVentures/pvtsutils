@@ -72,16 +72,7 @@ export const utf16leConverter: Converter = {
 };
 
 /** The built-in converter set shipped with the package. */
-export const defaultConverters = [
-  binaryConverter,
-  hexConverter,
-  base64Converter,
-  base64urlConverter,
-  utf8Converter,
-  utf16beConverter,
-  utf16leConverter,
-  pemConverter,
-] as const;
+export const defaultConverters = [binaryConverter, hexConverter, base64Converter, base64urlConverter, utf8Converter, utf16beConverter, utf16leConverter, pemConverter] as const;
 
 /** The default registry preloaded with the built-in converters. */
 export const defaultConverterRegistry = createConverterRegistry(defaultConverters);

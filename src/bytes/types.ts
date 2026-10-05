@@ -19,18 +19,17 @@ export interface ArrayBufferViewConstructor<T extends ArrayBufferViewLike = Arra
   readonly prototype: T;
   readonly BYTES_PER_ELEMENT?: number;
   readonly name: string;
-  new(length: number): T;
-  new(array: ArrayLike<number>): T;
-  new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): T;
+  new (length: number): T;
+  new (array: ArrayLike<number>): T;
+  new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): T;
 }
 
 /** Constructor shape for DataView-like views. */
 export interface DataViewConstructorLike<T extends ArrayBufferViewLike = ArrayBufferViewLike> {
   readonly prototype: T;
   readonly name: string;
-  new(buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): T;
+  new (buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): T;
 }
 
 /** A constructor that can create a typed view over buffer data. */
-export type ViewConstructor<T extends ArrayBufferViewLike = ArrayBufferViewLike>
-  = ArrayBufferViewConstructor<T> | DataViewConstructorLike<T>;
+export type ViewConstructor<T extends ArrayBufferViewLike = ArrayBufferViewLike> = ArrayBufferViewConstructor<T> | DataViewConstructorLike<T>;

@@ -185,12 +185,16 @@ describe("bytes", () => {
     const utf8Data = new Uint8Array([0x6e, 0x61, 0xc3, 0xaf, 0x76, 0x65]);
 
     expect(indexOf(ascii, "%%EOF", { encoding: "ascii" })).toBe(0);
-    expect(lastIndexOf(new Uint8Array([0x78, 0x72, 0x65, 0x66, 0x20, 0x78, 0x72, 0x65, 0x66]), "xref", {
-      encoding: "ascii",
-    })).toBe(5);
-    expect(includes(new Uint8Array([0x73, 0x74, 0x61, 0x72, 0x74, 0x78, 0x72, 0x65, 0x66]), "startxref", {
-      encoding: "ascii",
-    })).toBe(true);
+    expect(
+      lastIndexOf(new Uint8Array([0x78, 0x72, 0x65, 0x66, 0x20, 0x78, 0x72, 0x65, 0x66]), "xref", {
+        encoding: "ascii",
+      }),
+    ).toBe(5);
+    expect(
+      includes(new Uint8Array([0x73, 0x74, 0x61, 0x72, 0x74, 0x78, 0x72, 0x65, 0x66]), "startxref", {
+        encoding: "ascii",
+      }),
+    ).toBe(true);
     expect(startsWith(new Uint8Array([0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x42]), "-----B", { encoding: "ascii" })).toBe(true);
     expect(endsWith(ascii, "%%EOF", { encoding: "ascii" })).toBe(true);
 

@@ -21,9 +21,7 @@ export interface ParsedBytes<TFormat = unknown> {
 }
 
 /** Result of a safe decode operation that does not throw. */
-export type DecodeResult
-  = | { ok: true; bytes: Uint8Array }
-    | { ok: false; error: Error };
+export type DecodeResult = { ok: true; bytes: Uint8Array } | { ok: false; error: Error };
 
 /** Ranked format detection candidate. */
 export interface FormatDetection {
@@ -62,12 +60,11 @@ type RequiredKeys<T extends object> = {
 }[keyof T];
 type NonUndefined<T> = Exclude<T, undefined>;
 
-type CapabilityOptions<TName extends string, TCapability extends "encode" | "decode" | "format">
-  = TName extends KnownConverterName
-    ? ConverterOptionsMap[TName] extends Record<TCapability, infer TOptions>
-      ? TOptions
-      : unknown
-    : unknown;
+type CapabilityOptions<TName extends string, TCapability extends "encode" | "decode" | "format"> = TName extends KnownConverterName
+  ? ConverterOptionsMap[TName] extends Record<TCapability, infer TOptions>
+    ? TOptions
+    : unknown
+  : unknown;
 
 /** Resolves typed encode options for a known converter name. */
 export type EncodeOptionsFor<TName extends string> = CapabilityOptions<TName, "encode">;
@@ -79,16 +76,15 @@ export type DecodeOptionsFor<TName extends string> = CapabilityOptions<TName, "d
 export type FormatFor<TName extends string> = CapabilityOptions<TName, "format">;
 
 /** Builds an optional or required options tuple depending on the options type. */
-export type OptionsArgument<TOptions>
-  = [TOptions] extends [never]
-    ? []
-    : unknown extends TOptions
-      ? [options?: TOptions]
-      : [NonUndefined<TOptions>] extends [object]
-          ? RequiredKeys<NonUndefined<TOptions>> extends never
-            ? [options?: TOptions]
-            : [options: TOptions]
-          : [options: TOptions];
+export type OptionsArgument<TOptions> = [TOptions] extends [never]
+  ? []
+  : unknown extends TOptions
+    ? [options?: TOptions]
+    : [NonUndefined<TOptions>] extends [object]
+      ? RequiredKeys<NonUndefined<TOptions>> extends never
+        ? [options?: TOptions]
+        : [options: TOptions]
+      : [options: TOptions];
 
 /** Options for direct format-to-format transcoding. */
 export interface TranscodeOptions<TFrom extends string = string, TTo extends string = string> {

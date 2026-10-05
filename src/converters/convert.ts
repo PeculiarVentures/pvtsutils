@@ -2,17 +2,7 @@ import type { BufferSourceLike } from "../bytes/index.js";
 import { toArrayBuffer } from "../bytes/index.js";
 import { base64, base64url, binary, hex, utf8, utf16 } from "../encoding/index.js";
 import { defaultConverterRegistry } from "./defaults.js";
-import type {
-  DecodeOptionsFor,
-  DetectOptions,
-  EncodeOptionsFor,
-  FormatDetection,
-  FormatFor,
-  OptionsArgument,
-  ParsedBytes,
-  TranscodeOptions,
-  DecodeResult,
-} from "./types.js";
+import type { DecodeOptionsFor, DetectOptions, EncodeOptionsFor, FormatDetection, FormatFor, OptionsArgument, ParsedBytes, TranscodeOptions, DecodeResult } from "./types.js";
 
 /** Text encodings supported by the legacy converter facade. */
 export type BufferEncoding = "utf8" | "utf-8" | "binary" | "latin1" | "base64" | "base64url" | "base64-url" | "hex" | "utf16" | "utf16be" | "utf16le" | string;
@@ -168,8 +158,7 @@ export const convert: ConvertFacade = {
   /** Decodes UTF-16 bytes into text. */
   toUtf16String: (data: BufferSourceLike, littleEndian = false): string => utf16.decode(data, { littleEndian }),
   /** Encodes UTF-16 text into bytes. */
-  fromUtf16String: (text: string, littleEndian = false): ArrayBufferLike =>
-    toArrayBuffer(utf16.encode(text, { littleEndian })),
+  fromUtf16String: (text: string, littleEndian = false): ArrayBufferLike => toArrayBuffer(utf16.encode(text, { littleEndian })),
   /** Checks whether a value is hexadecimal text. */
   isHex: hex.is,
   /** Checks whether a value is Base64 text. */

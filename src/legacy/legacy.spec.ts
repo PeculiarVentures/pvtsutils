@@ -38,16 +38,8 @@ describe("legacy", () => {
     expect(Convert.ToUtf8String(payload, "ascii")).toBe("hi");
     expect(Convert.ToUtf8String(new Uint8Array([65, 0, 0, 1]), "utf16le")).toBe("AĀ");
     expect(Array.from(new Uint8Array(Convert.FromUtf8String("hi")))).toEqual([104, 105]);
-    expect(Array.from(new Uint8Array(Convert.FromUtf8String("hi", "ascii")))).toEqual([
-      104,
-      105,
-    ]);
-    expect(Array.from(new Uint8Array(Convert.FromUtf8String("AĀ", "utf16le")))).toEqual([
-      65,
-      0,
-      0,
-      1,
-    ]);
+    expect(Array.from(new Uint8Array(Convert.FromUtf8String("hi", "ascii")))).toEqual([104, 105]);
+    expect(Array.from(new Uint8Array(Convert.FromUtf8String("AĀ", "utf16le")))).toEqual([65, 0, 0, 1]);
     expect(Convert.ToBinary(payload)).toBe("hi");
     expect(Array.from(new Uint8Array(Convert.FromBinary("hi")))).toEqual([104, 105]);
     expect(Convert.ToHex(new Uint8Array([0, 15]))).toBe("000f");
@@ -70,20 +62,8 @@ describe("legacy", () => {
     expect(Array.from(BufferSourceConverter.toUint8Array(buffer.buffer))).toEqual([1, 2, 3, 4]);
     expect(BufferSourceConverter.toView(buffer, DataView)).toBeInstanceOf(DataView);
     expect(BufferSourceConverter.isEqual(buffer, new Uint8Array([1, 2, 3, 4]))).toBe(true);
-    expect(Array.from(new Uint8Array(BufferSourceConverter.concat([buffer.subarray(0, 2), buffer.subarray(2)])))).toEqual([
-      1,
-      2,
-      3,
-      4,
-    ]);
-    expect(Array.from(new Uint8Array(BufferSourceConverter.concat(buffer.subarray(0, 2), buffer.subarray(2))))).toEqual([
-      1,
-      2,
-      3,
-      4,
-    ]);
-    expect(
-      BufferSourceConverter.concat([buffer.subarray(0, 2), buffer.subarray(2)], Uint16Array),
-    ).toBeInstanceOf(Uint16Array);
+    expect(Array.from(new Uint8Array(BufferSourceConverter.concat([buffer.subarray(0, 2), buffer.subarray(2)])))).toEqual([1, 2, 3, 4]);
+    expect(Array.from(new Uint8Array(BufferSourceConverter.concat(buffer.subarray(0, 2), buffer.subarray(2))))).toEqual([1, 2, 3, 4]);
+    expect(BufferSourceConverter.concat([buffer.subarray(0, 2), buffer.subarray(2)], Uint16Array)).toBeInstanceOf(Uint16Array);
   });
 });

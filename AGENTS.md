@@ -13,7 +13,7 @@
 ## Build And Release
 
 - Build with `npm run build`; tsdown (`tsdown.config.ts`) writes an unbundled tree under `build/` that mirrors `src/`, with `.mjs`/`.cjs` output and `.d.mts`/`.d.cts` declarations.
-- Package exports use `module` (ESM, for bundlers) and `default` (CJS) conditions so Node always loads a single copy of the package.
+- Package exports use `module` (ESM, for bundlers) and `default` (CJS) conditions so Node always loads a single copy of the package. Inside `default`, `node` serves CJS types and runtime to Node and TS `nodenext`, and a types-only `import` branch gives TS `bundler` mode the `.d.mts` types that match the ESM file bundlers load; keep this shape for every subpath.
 - Keep published paths in `package.json` in sync with the actual build output.
 - Do not commit generated build artifacts.
 

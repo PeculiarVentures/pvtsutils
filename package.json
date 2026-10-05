@@ -13,6 +13,13 @@
         "default": "./build/index.mjs"
       },
       "default": {
+        "node": {
+          "types": "./build/index.d.cts",
+          "default": "./build/index.cjs"
+        },
+        "import": {
+          "types": "./build/index.d.mts"
+        },
         "types": "./build/index.d.cts",
         "default": "./build/index.cjs"
       }
@@ -23,6 +30,13 @@
         "default": "./build/bytes/index.mjs"
       },
       "default": {
+        "node": {
+          "types": "./build/bytes/index.d.cts",
+          "default": "./build/bytes/index.cjs"
+        },
+        "import": {
+          "types": "./build/bytes/index.d.mts"
+        },
         "types": "./build/bytes/index.d.cts",
         "default": "./build/bytes/index.cjs"
       }
@@ -33,6 +47,13 @@
         "default": "./build/encoding/index.mjs"
       },
       "default": {
+        "node": {
+          "types": "./build/encoding/index.d.cts",
+          "default": "./build/encoding/index.cjs"
+        },
+        "import": {
+          "types": "./build/encoding/index.d.mts"
+        },
         "types": "./build/encoding/index.d.cts",
         "default": "./build/encoding/index.cjs"
       }
@@ -43,6 +64,13 @@
         "default": "./build/encoding/*.mjs"
       },
       "default": {
+        "node": {
+          "types": "./build/encoding/*.d.cts",
+          "default": "./build/encoding/*.cjs"
+        },
+        "import": {
+          "types": "./build/encoding/*.d.mts"
+        },
         "types": "./build/encoding/*.d.cts",
         "default": "./build/encoding/*.cjs"
       }
@@ -53,6 +81,13 @@
         "default": "./build/converters/index.mjs"
       },
       "default": {
+        "node": {
+          "types": "./build/converters/index.d.cts",
+          "default": "./build/converters/index.cjs"
+        },
+        "import": {
+          "types": "./build/converters/index.d.mts"
+        },
         "types": "./build/converters/index.d.cts",
         "default": "./build/converters/index.cjs"
       }
@@ -63,6 +98,13 @@
         "default": "./build/pem/index.mjs"
       },
       "default": {
+        "node": {
+          "types": "./build/pem/index.d.cts",
+          "default": "./build/pem/index.cjs"
+        },
+        "import": {
+          "types": "./build/pem/index.d.mts"
+        },
         "types": "./build/pem/index.d.cts",
         "default": "./build/pem/index.cjs"
       }
@@ -73,6 +115,13 @@
         "default": "./build/legacy/index.mjs"
       },
       "default": {
+        "node": {
+          "types": "./build/legacy/index.d.cts",
+          "default": "./build/legacy/index.cjs"
+        },
+        "import": {
+          "types": "./build/legacy/index.d.mts"
+        },
         "types": "./build/legacy/index.d.cts",
         "default": "./build/legacy/index.cjs"
       }

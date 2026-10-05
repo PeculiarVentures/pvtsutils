@@ -1,4 +1,4 @@
-declare const TextEncoder: new() => { encode(text: string): Uint8Array };
+declare const TextEncoder: new () => { encode(text: string): Uint8Array };
 
 import { toUint8Array, toUint8ArrayCopy } from "./buffer-source.js";
 import type { BufferSourceLike } from "./types.js";
@@ -149,11 +149,7 @@ export function includes(data: BufferSourceLike, pattern: BytePattern, options?:
 }
 
 /** Returns `true` when the byte sequence starts with the requested pattern. */
-export function startsWith(
-  data: BufferSourceLike,
-  pattern: BytePattern,
-  options?: Pick<ByteSearchOptions, "encoding">,
-): boolean {
+export function startsWith(data: BufferSourceLike, pattern: BytePattern, options?: Pick<ByteSearchOptions, "encoding">): boolean {
   const bytes = toUint8Array(data);
   const needle = toPatternBytes(pattern, options);
 
@@ -165,11 +161,7 @@ export function startsWith(
 }
 
 /** Returns `true` when the byte sequence ends with the requested pattern. */
-export function endsWith(
-  data: BufferSourceLike,
-  pattern: BytePattern,
-  options?: Pick<ByteSearchOptions, "encoding">,
-): boolean {
+export function endsWith(data: BufferSourceLike, pattern: BytePattern, options?: Pick<ByteSearchOptions, "encoding">): boolean {
   const bytes = toUint8Array(data);
   const needle = toPatternBytes(pattern, options);
 

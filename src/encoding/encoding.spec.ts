@@ -14,29 +14,14 @@ describe("encoding", () => {
     expect(Array.from(encoding.binary.decode("hi"))).toEqual([104, 105]);
 
     const utf8Text = "Grüße";
-    expect(Array.from(encoding.utf8.encode(utf8Text))).toEqual([
-      71,
-      114,
-      195,
-      188,
-      195,
-      159,
-      101,
-    ]);
+    expect(Array.from(encoding.utf8.encode(utf8Text))).toEqual([71, 114, 195, 188, 195, 159, 101]);
     expect(encoding.utf8.decode(encoding.utf8.encode(utf8Text))).toBe(utf8Text);
 
     const utf16Text = "A\u0100";
     expect(Array.from(encoding.utf16.encode(utf16Text))).toEqual([0, 65, 1, 0]);
-    expect(Array.from(encoding.utf16.encode(utf16Text, { littleEndian: true }))).toEqual([
-      65,
-      0,
-      0,
-      1,
-    ]);
+    expect(Array.from(encoding.utf16.encode(utf16Text, { littleEndian: true }))).toEqual([65, 0, 0, 1]);
     expect(encoding.utf16.decode(new Uint8Array([0, 65, 1, 0]))).toBe(utf16Text);
-    expect(encoding.utf16.decode(new Uint8Array([65, 0, 0, 1]), { littleEndian: true })).toBe(
-      utf16Text,
-    );
+    expect(encoding.utf16.decode(new Uint8Array([65, 0, 0, 1]), { littleEndian: true })).toBe(utf16Text);
   });
 
   it("encodes structural ArrayBufferView-like values", () => {

@@ -30,9 +30,7 @@ function isArrayBufferViewLike(value: unknown): value is ArrayBufferViewLike {
   }
 
   const view = value as Partial<ArrayBufferViewLike>;
-  return typeof view.byteOffset === "number"
-    && typeof view.byteLength === "number"
-    && isArrayBufferLike(view.buffer);
+  return typeof view.byteOffset === "number" && typeof view.byteLength === "number" && isArrayBufferLike(view.buffer);
 }
 
 function copyBytes(data: BufferSourceLike): Uint8Array {
@@ -119,10 +117,7 @@ export function toArrayBufferLike(data: BufferSourceLike): ArrayBufferLike {
 }
 
 /** Casts buffer data into the requested view type. */
-export function toView<T extends ArrayBufferViewLike>(
-  data: BufferSourceLike,
-  type: ViewConstructor<T>,
-): T {
+export function toView<T extends ArrayBufferViewLike>(data: BufferSourceLike, type: ViewConstructor<T>): T {
   assertBufferSource(data);
 
   if (ArrayBuffer.isView(data) && data.constructor === type) {
@@ -140,18 +135,11 @@ export function toView<T extends ArrayBufferViewLike>(
     return new (type as unknown as DataViewConstructor)(view.buffer, view.byteOffset, view.byteLength) as unknown as T;
   }
 
-  return new (type as ArrayBufferViewConstructor<T>)(
-    view.buffer,
-    view.byteOffset,
-    view.byteLength / elementSize,
-  );
+  return new (type as ArrayBufferViewConstructor<T>)(view.buffer, view.byteOffset, view.byteLength / elementSize);
 }
 
 /** Copies buffer data into the requested view type. */
-export function toViewCopy<T extends ArrayBufferViewLike>(
-  data: BufferSourceLike,
-  type: ViewConstructor<T>,
-): T {
+export function toViewCopy<T extends ArrayBufferViewLike>(data: BufferSourceLike, type: ViewConstructor<T>): T {
   const copy = toUint8ArrayCopy(data);
   return toView(copy, type);
 }

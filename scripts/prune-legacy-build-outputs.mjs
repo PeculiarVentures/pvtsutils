@@ -13,13 +13,7 @@ function pruneLegacyOutputs(dirPath) {
       continue;
     }
 
-    if (
-      entry.name.endsWith(".mjs")
-      || entry.name.endsWith(".cjs")
-      || entry.name.endsWith(".d.mts")
-      || entry.name.endsWith(".d.cts")
-      || entry.name.endsWith(".d.ts")
-    ) {
+    if (entry.name.endsWith(".mjs") || entry.name.endsWith(".cjs") || entry.name.endsWith(".d.mts") || entry.name.endsWith(".d.cts") || entry.name.endsWith(".d.ts")) {
       rmSync(entryPath);
     }
   }

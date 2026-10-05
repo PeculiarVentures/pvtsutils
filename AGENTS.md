@@ -34,6 +34,6 @@
 
 ## Linting And Formatting
 
-- Use ESLint for linting and save-time formatting.
-- Keep the ESLint config practical; disable style rules only when they fight the established code style.
+- Use oxlint (`.oxlintrc.json`) for linting and oxfmt (`.oxfmtrc.json`) for formatting, including save-time formatting.
+- Keep the oxlint config practical; disable rules only when they fight the established code style.
 - Prefer source fixes over expanding the rule set when a rule only creates noisy churn.

@@ -1,5 +1,8 @@
-declare const TextEncoder: new() => { encode(text: string): Uint8Array };
-declare const TextDecoder: new(label?: string, options?: { fatal?: boolean }) => {
+declare const TextEncoder: new () => { encode(text: string): Uint8Array };
+declare const TextDecoder: new (
+  label?: string,
+  options?: { fatal?: boolean },
+) => {
   decode(data: Uint8Array): string;
 };
 

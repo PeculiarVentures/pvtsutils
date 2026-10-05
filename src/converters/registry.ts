@@ -1,12 +1,5 @@
 import type { BufferSourceLike } from "../bytes/index.js";
-import type {
-  Converter,
-  ConverterRegistry,
-  DetectOptions,
-  FormatDetection,
-  RegisterOptions,
-  TranscodeOptions,
-} from "./types.js";
+import type { Converter, ConverterRegistry, DetectOptions, FormatDetection, RegisterOptions, TranscodeOptions } from "./types.js";
 
 function keyOf(name: string): string {
   return name.trim().toLowerCase();
@@ -23,11 +16,7 @@ function removeConverter(converters: Map<string, Converter>, primaryNames: Set<s
   primaryNames.delete(keyOf(converter.name));
 }
 
-function requireCapability<TCapability extends "normalize" | "parse" | "format">(
-  converter: Converter,
-  name: string,
-  capability: TCapability,
-): NonNullable<Converter[TCapability]> {
+function requireCapability<TCapability extends "normalize" | "parse" | "format">(converter: Converter, name: string, capability: TCapability): NonNullable<Converter[TCapability]> {
   const method = converter[capability];
   if (typeof method !== "function") {
     throw new Error(`Converter '${name}' does not support ${capability}()`);

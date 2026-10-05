@@ -33,7 +33,10 @@ function wrap(text: string, lineLength: number): string[] {
 
 function parseBody(body: string): ParsedPemBody {
   const normalized = body.trim().replace(/\r\n/g, "\n");
-  const lines = normalized.split("\n").map((line) => line.trim()).filter(Boolean);
+  const lines = normalized
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
   const headers: Record<string, string> = {};
   let index = 0;
 
@@ -81,9 +84,7 @@ function collectBlocks(text: string, options: PemDecodeOptions = {}): MatchedPem
   }
 
   if (options.strict && blocks.length === 0) {
-    throw new TypeError(requestedLabel
-      ? `No PEM block with label '${requestedLabel}' was found`
-      : "No PEM blocks were found");
+    throw new TypeError(requestedLabel ? `No PEM block with label '${requestedLabel}' was found` : "No PEM blocks were found");
   }
 
   return blocks;

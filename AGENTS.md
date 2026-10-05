@@ -8,7 +8,6 @@
 - `src/converters/` contains the converter registry and default adapters.
 - `src/pem/` contains PEM parsing and formatting helpers.
 - `src/legacy/` keeps the compatibility layer for older APIs.
-- `src/namespaces/` holds internal `export *` modules used as targets for `export * as` re-exports, so the bundler-generated namespace objects do not leak extra exports into public subpaths. Point new namespace re-exports here instead of at the public module.
 
 ## Build And Release
 

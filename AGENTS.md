@@ -11,7 +11,7 @@
 
 ## Build And Release
 
-- Build with `npm run build`; tsdown (`tsdown.config.ts`) bundles one named entry per public subpath (`index`, `bytes`, `encoding`, `converters`, `pem`, `legacy`) into flat `build/<entry>.mjs`/`.cjs` files with `.d.mts`/`.d.cts` declarations, plus hashed shared chunks.
+- Build with `npm run build`; tsdown (`tsdown.config.ts`) bundles one named entry per public subpath (`index`, `bytes`, `encoding`, `converters`, `pem`, `legacy`) into `build/<entry>.mjs`/`.cjs` files with `.d.mts`/`.d.cts` declarations. Output is unbundled (`unbundle: true`): every source module is emitted under `build/` mirroring `src/`, plus rolldown's runtime helpers in `build/_virtual/`. Only the entry files are reachable through `exports`.
 - tsdown generates `exports`, `main`, `module`, and `types` in `package.json` on every build, using plain `import`/`require` conditions. Do not hand-edit those fields; add or rename a public subpath by changing `entry` in `tsdown.config.ts`, then rebuild and commit the regenerated `package.json`.
 - Encoding helpers are published only through `./encoding` (and the root entry) as namespaces; there are no per-file `./encoding/*` subpaths.
 - Do not commit generated build artifacts.

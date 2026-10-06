@@ -12,6 +12,13 @@ export default defineConfig({
   format: ["esm", "cjs"],
   dts: true,
   clean: true,
+  // Emit one file per source module. Bundled multi-entry declarations leave
+  // rolldown's `__exportAll` namespace helper in shared `.d.cts` chunks
+  // (see rolldown/tsdown#1051); unbundled output keeps it in its own module.
+  unbundle: true,
+  // Keep .js/.mjs/.d.ts output names (package.json is "type": "commonjs")
+  // instead of tsdown's node-platform default of fixed .cjs/.mjs extensions.
+  fixedExtension: false,
   deps: {
     neverBundle: true,
   },

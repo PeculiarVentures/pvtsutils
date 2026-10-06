@@ -4,32 +4,32 @@
   "description": "Modern byte, encoding, converter registry, and PEM utilities for TypeScript projects.",
   "type": "module",
   "main": "./build/index.cjs",
-  "module": "./build/index.mjs",
+  "module": "./build/index.js",
   "types": "./build/index.d.cts",
   "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./build/index.mjs",
+      "import": "./build/index.js",
       "require": "./build/index.cjs"
     },
     "./bytes": {
-      "import": "./build/bytes.mjs",
+      "import": "./build/bytes.js",
       "require": "./build/bytes.cjs"
     },
     "./converters": {
-      "import": "./build/converters.mjs",
+      "import": "./build/converters.js",
       "require": "./build/converters.cjs"
     },
     "./encoding": {
-      "import": "./build/encoding.mjs",
+      "import": "./build/encoding.js",
       "require": "./build/encoding.cjs"
     },
     "./legacy": {
-      "import": "./build/legacy.mjs",
+      "import": "./build/legacy.js",
       "require": "./build/legacy.cjs"
     },
     "./pem": {
-      "import": "./build/pem.mjs",
+      "import": "./build/pem.js",
       "require": "./build/pem.cjs"
     },
     "./package.json": "./package.json"

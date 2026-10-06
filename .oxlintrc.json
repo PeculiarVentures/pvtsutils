@@ -16,5 +16,5 @@
     "unicorn/no-array-reverse": "off",
     "unicorn/no-array-sort": "off"
   },
-  "ignorePatterns": ["**/build/**", "coverage/**", "vitest.config.ts"]
+  "ignorePatterns": ["**/build/**", "coverage/**"]
 }

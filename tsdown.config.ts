@@ -21,4 +21,7 @@ export default defineConfig({
   },
   outDir: "build",
   tsconfig: "tsconfig.json",
+  attw: {
+    level: "error",
+  },
 });

@@ -1,0 +1,96 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - package.json
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      release: ${{ steps.version.outputs.release }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Check for unreleased version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" > /dev/null; then
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.release == 'true'
+    environment: npm
+
+    permissions:
+      contents: write
+      id-token: write
+
+    env:
+      VERSION: ${{ needs.check.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Publish to npm via Trusted Publisher
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+
+          if npm view "$NAME@$VERSION" version > /dev/null 2>&1; then
+            echo "$NAME@$VERSION is already published"
+          else
+            npm publish
+          fi
+
+      - name: Push tags
+        run: |
+          git tag "v$VERSION"
+          git tag -f "v${VERSION%%.*}"
+          git push origin "v$VERSION"
+          git push -f origin "v${VERSION%%.*}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "v$VERSION" --verify-tag --title "v$VERSION" --generate-notes

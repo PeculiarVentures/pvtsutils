@@ -48,6 +48,8 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
         with:
+          # PRs opened with GITHUB_TOKEN do not trigger other workflows; set RELEASE_TOKEN so Test runs on the release PR.
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
           branch: release/version-bump
           commit-message: "chore(release): v${{ steps.version.outputs.version }}"
           title: "chore(release): v${{ steps.version.outputs.version }}"

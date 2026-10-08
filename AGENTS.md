@@ -15,6 +15,8 @@
 - tsdown generates `exports`, `main`, `module`, and `types` in `package.json` on every build, using plain `import`/`require` conditions. Do not hand-edit those fields; add or rename a public subpath by changing `entry` in `tsdown.config.ts`, then rebuild and commit the regenerated `package.json`.
 - Encoding helpers are published only through `./encoding` (and the root entry) as namespaces; there are no per-file `./encoding/*` subpaths.
 - Do not commit generated build artifacts.
+- Release in two steps: run the **Version Bump** workflow (`patch`/`minor`/`major`) to open a PR that bumps `package.json` and prepends `CHANGELOG.md` via `conventional-changelog -p angular`; merging it triggers **Publish**, which runs checks, publishes to npm, pushes `v<version>` and the moving major tag, and creates the GitHub Release from the matching `CHANGELOG.md` section. Publish runs only when no GitHub Release exists for `v<version>` yet, so a failed run can be re-run safely. Set the optional `RELEASE_TOKEN` secret (PAT or GitHub App token) so checks run on the version-bump PR.
+- Use Conventional Commit messages (and squash-merge PR titles) so they land in the changelog. Do not hand-edit released `CHANGELOG.md` sections.
 
 ## Code Rules
 

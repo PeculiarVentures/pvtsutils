@@ -1,3 +1,5 @@
+## [3.0.1](https://github.com/PeculiarVentures/pvtsutils/compare/v3.0.0...v3.0.1) (2026-10-13)
+
 # [3.0.0](https://github.com/PeculiarVentures/pvtsutils/compare/v2.0.3...v3.0.0) (2026-10-08)
 
 ### BREAKING CHANGES

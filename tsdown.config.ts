@@ -24,10 +24,7 @@ export default defineConfig({
   deps: {
     neverBundle: true,
   },
-  exports: {
-    all: false,
-    legacy: true,
-  },
+  exports: true,
   outDir: "build",
   tsconfig: "tsconfig.json",
   attw: {

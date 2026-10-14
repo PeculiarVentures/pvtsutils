@@ -3,9 +3,6 @@
   "version": "3.0.1",
   "description": "Modern byte, encoding, converter registry, and PEM utilities for TypeScript projects.",
   "type": "module",
-  "main": "./build/index.js",
-  "module": "./build/index.js",
-  "types": "./build/index.d.ts",
   "sideEffects": false,
   "exports": {
     ".": "./build/index.js",

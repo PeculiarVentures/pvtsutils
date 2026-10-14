@@ -24,7 +24,7 @@ npm install @peculiar/utils
 Requirements:
 
 - Node.js `^20.19.0 || >=22.12.0`. The package is ESM-only; CommonJS code can still `require("@peculiar/utils")` because these Node.js versions support `require()` of ES modules.
-- TypeScript consumers that compile to CommonJS need `"module": "node20"` or `"nodenext"` (TypeScript 5.9+); `"node16"` reports TS1479. ESM and bundler setups (`"module": "preserve"`, `"moduleResolution": "bundler"`) work without changes.
+- TypeScript consumers that compile to CommonJS need `"module": "node20"` or `"nodenext"` (TypeScript 5.9+); `"node16"` reports TS1479. ESM and bundler setups (`"module": "preserve"`, `"moduleResolution": "bundler"`) work without changes. The legacy `"moduleResolution": "node"` (node10) is not supported because it ignores `exports`.
 
 ## Entry Points
 

@@ -27,6 +27,11 @@ export default defineConfig({
   exports: {
     legacy: true,
   },
+  outputOptions: {
+    // Drop TSDoc from the JS output; docs ship in the .d.ts files. Keep
+    // @__PURE__ annotations so bundlers can tree-shake.
+    comments: { legal: true, annotation: true, jsdoc: false },
+  },
   outDir: "build",
   tsconfig: "tsconfig.json",
   attw: {

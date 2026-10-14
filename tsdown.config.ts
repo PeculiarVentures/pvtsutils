@@ -31,10 +31,6 @@ export default defineConfig({
   tsconfig: "tsconfig.json",
   attw: {
     level: "error",
-    // Check every resolution mode, node10 included (served by the legacy fields
-    // and `typesVersions`). Only CommonJS-in-TypeScript (`module: node16`)
-    // resolving to ESM is expected for an ESM-only package.
-    profile: "strict",
-    ignoreRules: ["cjs-resolves-to-esm"],
+    profile: "esm-only",
   },
 });

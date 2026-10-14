@@ -16,25 +16,6 @@
     "./pem": "./build/pem.js",
     "./package.json": "./package.json"
   },
-  "typesVersions": {
-    "*": {
-      "bytes": [
-        "./build/bytes.d.ts"
-      ],
-      "converters": [
-        "./build/converters.d.ts"
-      ],
-      "encoding": [
-        "./build/encoding.d.ts"
-      ],
-      "legacy": [
-        "./build/legacy.d.ts"
-      ],
-      "pem": [
-        "./build/pem.d.ts"
-      ]
-    }
-  },
   "files": [
     "build/",
     "README.md",

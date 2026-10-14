@@ -1,9 +1,16 @@
-# @peculiar/utils
+<h1 align="center">
+  @peculiar/utils
+</h1>
 
-[![npm version](https://img.shields.io/npm/v/%40peculiar%2Futils.svg)](https://www.npmjs.com/package/@peculiar/utils)
-[![Test](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/test.yml)
-[![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/pvtsutils/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/pvtsutils?branch=master)
-[![License: MIT](https://img.shields.io/github/license/PeculiarVentures/pvtsutils.svg)](https://github.com/PeculiarVentures/pvtsutils/blob/master/LICENSE)
+<div align="center">
+
+![NPM License](https://img.shields.io/npm/l/@peculiar/utils)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/PeculiarVentures/pvtsutils/test.yml?label=test)
+[![npm version](https://img.shields.io/npm/v/@peculiar/utils.svg)](https://www.npmjs.com/package/@peculiar/utils)
+![Coveralls](https://img.shields.io/coverallsCoverage/github/PeculiarVentures/pvtsutils)
+[![npm downloads](https://img.shields.io/npm/dm/@peculiar/utils.svg)](https://www.npmjs.com/package/@peculiar/utils)
+
+</div>
 
 Modern byte, text, converter registry, and PEM utilities for TypeScript projects.
 

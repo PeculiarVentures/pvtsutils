@@ -11,8 +11,8 @@
 
 ## Build And Release
 
-- Build with `npm run build`; tsdown (`tsdown.config.ts`) bundles one named entry per public subpath (`index`, `bytes`, `encoding`, `converters`, `pem`, `legacy`) into `build/<entry>.mjs`/`.cjs` files with `.d.mts`/`.d.cts` declarations. Output is unbundled (`unbundle: true`): every source module is emitted under `build/` mirroring `src/`, plus rolldown's runtime helpers in `build/_virtual/`. Only the entry files are reachable through `exports`.
-- tsdown generates `exports`, `main`, `module`, and `types` in `package.json` on every build, using plain `import`/`require` conditions. Do not hand-edit those fields; add or rename a public subpath by changing `entry` in `tsdown.config.ts`, then rebuild and commit the regenerated `package.json`.
+- Build with `npm run build`; tsdown (`tsdown.config.ts`) bundles one named entry per public subpath (`index`, `bytes`, `encoding`, `converters`, `pem`, `legacy`) into ESM-only `build/<entry>.js` files with `.d.ts` declarations (no CommonJS build; CommonJS consumers use `require(esm)`). The syntax target comes from `engines.node` (`^20.19.0 || >=22.12.0`); do not set `target` in `tsdown.config.ts`. Output is unbundled (`unbundle: true`): every source module is emitted under `build/` mirroring `src/`, plus rolldown's runtime helpers in `build/_virtual/`. Only the entry files are reachable through `exports`.
+- tsdown generates `exports`, `main`, `module`, and `types` in `package.json` on every build, as plain ESM subpath strings. Do not hand-edit those fields; add or rename a public subpath by changing `entry` in `tsdown.config.ts`, then rebuild and commit the regenerated `package.json`.
 - Encoding helpers are published only through `./encoding` (and the root entry) as namespaces; there are no per-file `./encoding/*` subpaths.
 - Do not commit generated build artifacts.
 - Release in two steps: run the **Version Bump** workflow (`patch`/`minor`/`major`) to open a PR that bumps `package.json` and prepends `CHANGELOG.md` via `conventional-changelog -p angular`; merging it triggers **Publish**, which runs checks, publishes to npm, pushes `v<version>` and the moving major tag, and creates the GitHub Release from the matching `CHANGELOG.md` section. Publish runs only when no GitHub Release exists for `v<version>` yet, so a failed run can be re-run safely. Set the optional `RELEASE_TOKEN` secret (PAT or GitHub App token) so checks run on the version-bump PR.
@@ -22,7 +22,7 @@
 
 - Prefer BufferSource-based public APIs over Node-specific `Buffer` types.
 - Keep changes small and localized to the owning module.
-- Preserve the existing dual-module packaging model unless a change explicitly updates both sides.
+- The package is ESM-only. Use named exports only (no `export default`) and no top-level `await`, so `require()` of the package keeps working.
 - Keep exports stable unless the user explicitly asks for a breaking change.
 - Document every public exported type, function, method, and exported object member with concise TSDoc.
 

@@ -21,6 +21,11 @@ The package is designed around a modular v2 API:
 npm install @peculiar/utils
 ```
 
+Requirements:
+
+- Node.js `^20.19.0 || >=22.12.0`. The package is ESM-only; CommonJS code can still `require("@peculiar/utils")` because these Node.js versions support `require()` of ES modules.
+- TypeScript consumers that compile to CommonJS need `"module": "node20"` or `"nodenext"` (TypeScript 5.9+); `"node16"` reports TS1479. ESM and bundler setups (`"module": "preserve"`, `"moduleResolution": "bundler"`) work without changes.
+
 ## Entry Points
 
 ```ts

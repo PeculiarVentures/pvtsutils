@@ -24,11 +24,17 @@ export default defineConfig({
   deps: {
     neverBundle: true,
   },
-  exports: true,
+  exports: {
+    legacy: true,
+  },
   outDir: "build",
   tsconfig: "tsconfig.json",
   attw: {
     level: "error",
-    profile: "esm-only",
+    // Check every resolution mode, node10 included (served by the legacy fields
+    // and `typesVersions`). Only CommonJS-in-TypeScript (`module: node16`)
+    // resolving to ESM is expected for an ESM-only package.
+    profile: "strict",
+    ignoreRules: ["cjs-resolves-to-esm"],
   },
 });

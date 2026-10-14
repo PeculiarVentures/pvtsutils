@@ -299,3 +299,7 @@ The old `pvtsutils`-style surface is preserved under the legacy entry point.
 ```ts
 import { BufferSourceConverter, Convert, assign, combine, isEqual } from "@peculiar/utils/legacy";
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development setup, required checks, and release process.

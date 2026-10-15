@@ -95,18 +95,14 @@ Mark breaking changes with `!` after the type or scope (for example `feat(pem)!:
 
 ## Releases
 
-Releases are done in two steps:
+Releases are managed by [release-please](https://github.com/googleapis/release-please) (`release-please-config.json`, `.release-please-manifest.json`):
 
-1. Run the **Version Bump** workflow (Actions → Version Bump → Run workflow) and pick `patch`, `minor`, or `major`. It opens a `chore(release): vX.Y.Z` pull request that bumps `package.json`/`package-lock.json`. The pull request description contains release notes generated from the commits since the last release with `conventional-changelog -p angular`.
-2. Review the version and the release notes, edit the notes in the pull request description if needed (keep the `release-notes` markers), then merge the pull request. The **Publish** workflow then:
-   - runs lint, format, typecheck, tests, and build;
-   - publishes to npm via Trusted Publisher, with provenance;
-   - pushes the `vX.Y.Z` tag and moves the major tag (for example `v4`);
-   - creates a GitHub Release with the notes from the merged pull request.
+1. On every push to `master`, the **Publish** workflow first runs lint, format, typecheck, tests, and build (the **Test** workflow). Only when they pass does release-please open or update a `chore(release): vX.Y.Z` pull request that bumps `package.json`/`package-lock.json`. The version comes from the commits: a breaking change bumps major, `feat` bumps minor, and `fix`, `perf`, `build`, and `revert` bump patch. Other types do not trigger a release.
+2. Merge the release pull request. release-please creates the `vX.Y.Z` tag and a GitHub Release with the notes from the pull request; the workflow then publishes that commit to npm via Trusted Publisher, with provenance, and moves the major tag (for example `v4`) when this is the newest release of that major.
 
-Publish runs only when no GitHub Release exists for the current version, so a failed run can be re-run safely. Set the optional `RELEASE_TOKEN` secret (PAT or GitHub App token) so the Test workflow runs on the version bump pull request.
+To retry a failed npm publish, run **Publish** manually from the `vX.Y.Z` tag. Set the optional `RELEASE_TOKEN` secret (PAT or GitHub App token) so the Test workflow runs on the release pull request.
 
-Release notes live only in [GitHub Releases](https://github.com/PeculiarVentures/pvtsutils/releases); there is no `CHANGELOG.md`. Only `feat`, `fix`, `perf`, and breaking changes are listed. A release without them gets the placeholder "Maintenance release; no user-facing changes.", which you can replace in the pull request description.
+Release notes live only in [GitHub Releases](https://github.com/PeculiarVentures/pvtsutils/releases); there is no `CHANGELOG.md`. Only `feat`, `fix`, `perf`, `build`, `revert`, and breaking changes are listed. Force a version with a `Release-As: x.y.z` line in a commit body. To fix the notes for a merged change, add a `BEGIN_COMMIT_OVERRIDE` … `END_COMMIT_OVERRIDE` block with the corrected commit message to that pull request's description; edits to the release pull request description are overwritten when new commits land.
 
 ## License
 

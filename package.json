@@ -3,35 +3,17 @@
   "version": "3.0.1",
   "description": "Modern byte, encoding, converter registry, and PEM utilities for TypeScript projects.",
   "type": "module",
-  "main": "./build/index.cjs",
-  "module": "./build/index.js",
-  "types": "./build/index.d.cts",
   "sideEffects": false,
+  "main": "./build/index.js",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./build/index.js",
-      "require": "./build/index.cjs"
-    },
-    "./bytes": {
-      "import": "./build/bytes.js",
-      "require": "./build/bytes.cjs"
-    },
-    "./converters": {
-      "import": "./build/converters.js",
-      "require": "./build/converters.cjs"
-    },
-    "./encoding": {
-      "import": "./build/encoding.js",
-      "require": "./build/encoding.cjs"
-    },
-    "./legacy": {
-      "import": "./build/legacy.js",
-      "require": "./build/legacy.cjs"
-    },
-    "./pem": {
-      "import": "./build/pem.js",
-      "require": "./build/pem.cjs"
-    },
+    ".": "./build/index.js",
+    "./bytes": "./build/bytes.js",
+    "./converters": "./build/converters.js",
+    "./encoding": "./build/encoding.js",
+    "./legacy": "./build/legacy.js",
+    "./pem": "./build/pem.js",
     "./package.json": "./package.json"
   },
   "files": [
@@ -43,7 +25,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
     "test": "vitest run",
@@ -87,7 +69,6 @@
   "homepage": "https://github.com/PeculiarVentures/pvtsutils#readme",
   "devDependencies": {
     "@arethetypeswrong/core": "^0.18.5",
-    "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^4.1.5",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.86.0",

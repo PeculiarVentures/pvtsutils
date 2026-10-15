@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { base64, bytes, hex, utf8 } from "../src";
+import { base64, bytes, hex, utf8 } from "./index.js";
 
 describe("public API", () => {
   it("concatenates and compares buffers", () => {

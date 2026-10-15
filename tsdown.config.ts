@@ -9,27 +9,33 @@ export default defineConfig({
     pem: "src/pem/index.ts",
     legacy: "src/legacy/index.ts",
   },
-  format: ["esm", "cjs"],
+  // ESM only. CommonJS consumers load it through require(esm) on Node ^20.19 / >=22.12.
+  format: ["esm"],
+  platform: "neutral",
   dts: true,
   clean: true,
   // Emit one file per source module. Bundled multi-entry declarations leave
-  // rolldown's `__exportAll` namespace helper in shared `.d.cts` chunks
+  // rolldown's `__exportAll` namespace helper in shared declaration chunks
   // (see rolldown/tsdown#1051); unbundled output keeps it in its own module.
   unbundle: true,
-  // Keep .js/.mjs/.d.ts output names (package.json is "type": "commonjs")
-  // instead of tsdown's node-platform default of fixed .cjs/.mjs extensions.
+  // Keep .js/.d.ts output names (package.json is "type": "module")
+  // instead of fixed .mjs/.d.mts extensions.
   fixedExtension: false,
   deps: {
     neverBundle: true,
   },
   exports: {
-    all: false,
     legacy: true,
+  },
+  outputOptions: {
+    // Drop TSDoc from the JS output; docs ship in the .d.ts files. Keep
+    // @__PURE__ annotations so bundlers can tree-shake.
+    comments: { legal: true, annotation: true, jsdoc: false },
   },
   outDir: "build",
   tsconfig: "tsconfig.json",
   attw: {
     level: "error",
-    profile: "node16",
+    profile: "esm-only",
   },
 });

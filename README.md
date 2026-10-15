@@ -1,9 +1,16 @@
-# @peculiar/utils
+<h1 align="center">
+  @peculiar/utils
+</h1>
 
-[![npm version](https://img.shields.io/npm/v/%40peculiar%2Futils.svg)](https://www.npmjs.com/package/@peculiar/utils)
-[![Publish](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/publish.yml/badge.svg?branch=master)](https://github.com/PeculiarVentures/pvtsutils/actions/workflows/publish.yml)
-[![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/pvtsutils/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/pvtsutils?branch=master)
-[![License: MIT](https://img.shields.io/github/license/PeculiarVentures/pvtsutils.svg)](https://github.com/PeculiarVentures/pvtsutils/blob/master/LICENSE)
+<div align="center">
+
+![NPM License](https://img.shields.io/npm/l/@peculiar/utils)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/PeculiarVentures/pvtsutils/publish.yml?branch=master&label=publish)
+[![npm version](https://img.shields.io/npm/v/@peculiar/utils.svg)](https://www.npmjs.com/package/@peculiar/utils)
+![Coveralls](https://img.shields.io/coverallsCoverage/github/PeculiarVentures/pvtsutils)
+[![npm downloads](https://img.shields.io/npm/dm/@peculiar/utils.svg)](https://www.npmjs.com/package/@peculiar/utils)
+
+</div>
 
 Modern byte, text, converter registry, and PEM utilities for TypeScript projects.
 
@@ -20,6 +27,11 @@ The package is designed around a modular v2 API:
 ```bash
 npm install @peculiar/utils
 ```
+
+Requirements:
+
+- Node.js `^20.19.0 || >=22.12.0`. The package is ESM-only; CommonJS code can still `require("@peculiar/utils")` because these Node.js versions support `require()` of ES modules.
+- TypeScript consumers that compile to CommonJS need `"module": "node20"` or `"nodenext"` (TypeScript 5.9+); `"node16"` reports TS1479. ESM and bundler setups (`"module": "preserve"`, `"moduleResolution": "bundler"`) work without changes. The legacy `"moduleResolution": "node"` (node10) resolves only the root entry (through `types`); subpath imports need one of the settings above.
 
 ## Entry Points
 
@@ -294,3 +306,7 @@ The old `pvtsutils`-style surface is preserved under the legacy entry point.
 ```ts
 import { BufferSourceConverter, Convert, assign, combine, isEqual } from "@peculiar/utils/legacy";
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development setup, required checks, and release process.

@@ -17,39 +17,8 @@ concurrency:
 jobs:
   # Gates release-please, so a commit that fails checks never gets a tag or a GitHub Release.
   check:
-    runs-on: ubuntu-24.04
     if: github.event_name == 'push'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Check formatting
-        run: npm run format:check
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Test
-        run: npm test
-
-      - name: Build package
-        run: npm run build
-
-      - name: Check generated package exports are committed
-        run: git diff --exit-code package.json
+    uses: ./.github/workflows/test.yml
 
   release-please:
     runs-on: ubuntu-24.04

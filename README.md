@@ -28,10 +28,16 @@ The package is designed around a modular v2 API:
 npm install @peculiar/utils
 ```
 
-Requirements:
+## Breaking Changes In v4
 
-- Node.js `^20.19.0 || >=22.12.0`. The package is ESM-only; CommonJS code can still `require("@peculiar/utils")` because these Node.js versions support `require()` of ES modules.
-- TypeScript consumers that compile to CommonJS need `"module": "node20"` or `"nodenext"` (TypeScript 5.9+); `"node16"` reports TS1479. ESM and bundler setups (`"module": "preserve"`, `"moduleResolution": "bundler"`) work without changes. The legacy `"moduleResolution": "node"` (node10) resolves only the root entry (through `types`); subpath imports need one of the settings above.
+v4 ships ESM only. The CommonJS build (`*.cjs` files and `require` export conditions) has been removed.
+
+- **Node.js `^20.19.0 || >=22.12.0` is required** (previously `>=16`). These versions support `require()` of ES modules, so CommonJS code can keep using `require("@peculiar/utils")` without changes.
+- **TypeScript projects that compile to CommonJS** need `"module": "node20"` or `"nodenext"` (TypeScript 5.9+). With `"module": "node16"` the compiler reports TS1479.
+- **ESM and bundler setups** (`"module": "preserve"`, `"moduleResolution": "bundler"`) work without changes.
+- **Legacy `"moduleResolution": "node"` (node10)** resolves only the root entry through `types`. Subpath imports such as `@peculiar/utils/encoding` need one of the settings above.
+
+The public API is unchanged; only packaging and runtime requirements changed.
 
 ## Entry Points
 

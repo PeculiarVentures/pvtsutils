@@ -55,6 +55,7 @@ jobs:
     permissions:
       contents: write
       id-token: write
+      pull-requests: read
 
     env:
       VERSION: ${{ needs.check.outputs.version }}
@@ -62,26 +63,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Tags and history for the fallback release notes below.
+          fetch-depth: 0
 
       - name: Verify
         uses: ./.github/actions/verify
         with:
           registry-url: https://registry.npmjs.org
 
-      - name: Extract release notes
+      - name: Get release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          # Angular preset headings: "# [x.y.0](...)" for minor/major, "## [x.y.z](...)" for patch.
-          awk -v version="$VERSION" '
-            /^##? \[?[0-9]+\.[0-9]+\.[0-9]+/ {
-              if (found) exit
-              if (index($0, "[" version "]") || index($0, " " version " ")) { found = 1; next }
-            }
-            found { print }
-          ' CHANGELOG.md > "$RUNNER_TEMP/release-notes.md"
+          NOTES="$RUNNER_TEMP/release-notes.md"
 
-          if ! grep -q '[^[:space:]]' "$RUNNER_TEMP/release-notes.md"; then
-            echo "::error::No CHANGELOG.md section found for $VERSION"
-            exit 1
+          # Take the notes reviewed in the merged release PR (written by Version Bump between the markers).
+          gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" \
+            --jq '[.[] | select(.merged_at != null)][0].body // ""' \
+            | tr -d '\r' \
+            | awk '/<!-- release-notes:end -->/ { found = 0 } found { print } /<!-- release-notes:start -->/ { found = 1 }' \
+            > "$NOTES"
+
+          # No release PR (e.g. package.json bumped directly): generate the notes from the commits.
+          # --from pins the range, so a re-run after the release tag was pushed still finds the commits.
+          if ! grep -q '[^[:space:]]' "$NOTES"; then
+            echo "::warning::No release notes found in a merged release PR; generating them from commits"
+            PREV=$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' --exclude "v$VERSION" HEAD 2> /dev/null || true)
+            npx conventional-changelog -p angular --stdout ${PREV:+--from "$PREV"} | awk '!/^##? \[?[0-9]+\.[0-9]+\.[0-9]+/' > "$NOTES"
+          fi
+
+          if ! grep -q '[^[:space:]]' "$NOTES"; then
+            echo "Maintenance release; no user-facing changes." > "$NOTES"
           fi
 
       - name: Publish to npm via Trusted Publisher

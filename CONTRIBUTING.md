@@ -97,16 +97,16 @@ Mark breaking changes with `!` after the type or scope (for example `feat(pem)!:
 
 Releases are done in two steps:
 
-1. Run the **Version Bump** workflow (Actions → Version Bump → Run workflow) and pick `patch`, `minor`, or `major`. It opens a `chore(release): vX.Y.Z` pull request that bumps `package.json`/`package-lock.json` and prepends a `CHANGELOG.md` section generated with `conventional-changelog -p angular`.
-2. Review the version and changelog, then merge the pull request. The **Publish** workflow then:
+1. Run the **Version Bump** workflow (Actions → Version Bump → Run workflow) and pick `patch`, `minor`, or `major`. It opens a `chore(release): vX.Y.Z` pull request that bumps `package.json`/`package-lock.json`. The pull request description contains release notes generated from the commits since the last release with `conventional-changelog -p angular`.
+2. Review the version and the release notes, edit the notes in the pull request description if needed (keep the `release-notes` markers), then merge the pull request. The **Publish** workflow then:
    - runs lint, format, typecheck, tests, and build;
    - publishes to npm via Trusted Publisher, with provenance;
    - pushes the `vX.Y.Z` tag and moves the major tag (for example `v4`);
-   - creates a GitHub Release from the matching `CHANGELOG.md` section.
+   - creates a GitHub Release with the notes from the merged pull request.
 
 Publish runs only when no GitHub Release exists for the current version, so a failed run can be re-run safely. Set the optional `RELEASE_TOKEN` secret (PAT or GitHub App token) so the Test workflow runs on the version bump pull request.
 
-Only `feat`, `fix`, `perf`, and breaking changes appear in the changelog. If a release contains none of them, edit the new `CHANGELOG.md` section in the version bump pull request before merging; Publish fails on an empty section. Do not hand-edit released `CHANGELOG.md` sections.
+Release notes live only in [GitHub Releases](https://github.com/PeculiarVentures/pvtsutils/releases); there is no `CHANGELOG.md`. Only `feat`, `fix`, `perf`, and breaking changes are listed. A release without them gets the placeholder "Maintenance release; no user-facing changes.", which you can replace in the pull request description.
 
 ## License
 

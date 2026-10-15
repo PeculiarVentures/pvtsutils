@@ -42,8 +42,29 @@ jobs:
           npm version "${{ inputs.bump }}" --no-git-tag-version
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
-      - name: Update changelog
-        run: npx conventional-changelog -p angular
+      - name: Generate release notes
+        env:
+          BUMP: ${{ inputs.bump }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Notes for the commits since the last release tag; --stdout prints only the new
+          # section (there is no CHANGELOG.md), and awk drops its "# [x.y.z](...)" heading.
+          npx conventional-changelog -p angular --stdout | awk '!/^##? \[?[0-9]+\.[0-9]+\.[0-9]+/' > "$RUNNER_TEMP/notes.md"
+
+          if ! grep -q '[^[:space:]]' "$RUNNER_TEMP/notes.md"; then
+            echo "Maintenance release; no user-facing changes." > "$RUNNER_TEMP/notes.md"
+          fi
+
+          # Publish copies the text between the markers into the GitHub Release.
+          {
+            echo "Version bump: \`$BUMP\` → \`v$VERSION\`"
+            echo
+            echo "Review the version and the release notes below before merging. Edits between the markers become the GitHub Release notes. After merge the **Publish** workflow runs checks, publishes to npm, pushes the \`v$VERSION\` tag, moves the major tag, and creates the GitHub Release."
+            echo
+            echo "<!-- release-notes:start -->"
+            cat "$RUNNER_TEMP/notes.md"
+            echo "<!-- release-notes:end -->"
+          } > "$RUNNER_TEMP/pr-body.md"
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
@@ -53,7 +74,4 @@ jobs:
           branch: release/version-bump
           commit-message: "chore(release): v${{ steps.version.outputs.version }}"
           title: "chore(release): v${{ steps.version.outputs.version }}"
-          body: |
-            Version bump: `${{ inputs.bump }}` → `v${{ steps.version.outputs.version }}`
-
-            Review the version and `CHANGELOG.md` before merging. After merge the **Publish** workflow runs checks, publishes to npm, pushes the `v${{ steps.version.outputs.version }}` tag, moves the major tag, and creates the GitHub Release.
+          body-path: ${{ runner.temp }}/pr-body.md

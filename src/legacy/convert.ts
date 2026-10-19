@@ -11,7 +11,7 @@ import { convert, type BufferEncoding } from "../converters/index.js";
 import type { Utf16Options } from "../encoding/utf16.js";
 
 /** Legacy text encodings accepted by the deprecated facade. */
-export type TextEncoding = "ascii" | "utf8" | "utf16" | "utf16be" | "utf16le" | "usc2";
+export type TextEncoding = "ascii" | "utf8" | "utf-8" | "utf16" | "utf16be" | "utf16le" | "usc2";
 
 function normalizeTextEncoding(encoding: TextEncoding): BufferEncoding {
   return encoding === "ascii" ? "binary" : encoding;
@@ -111,7 +111,7 @@ export class Convert {
    * @throws {TypeError} When UTF-8 is requested and the text contains lone surrogates.
    */
   public static FromUtf8String(text: string, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): ArrayBufferLike {
-    if (encoding === "utf8") {
+    if (isUtf8Encoding(encoding)) {
       return encodeUtf8Strict(text);
     }
     return convert.fromString(text, normalizeTextEncoding(encoding));
@@ -122,7 +122,7 @@ export class Convert {
    * @throws {TypeError} When UTF-8 is requested and the bytes are not valid UTF-8.
    */
   public static ToUtf8String(buffer: BufferSourceLike, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): string {
-    if (encoding === "utf8") {
+    if (isUtf8Encoding(encoding)) {
       return decodeUtf8Strict(buffer);
     }
     return convert.toString(buffer, normalizeTextEncoding(encoding));

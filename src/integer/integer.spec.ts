@@ -19,6 +19,29 @@ describe("uint", () => {
     expect(uint.decode(new Uint8Array([0x06, 0x77, 0x0d]), { bitsPerByte: 7 })).toBe(113549);
   });
 
+  it.each([1, 2, 3, 4, 5, 6, 7, 8])("round-trips %i-bit digits", (bits) => {
+    const radix = 2 ** bits;
+    const options = { bitsPerByte: bits };
+
+    for (const value of [0, 1, radix - 1, radix, radix + 1, radix ** 2 - 1, radix ** 2, 1000]) {
+      const encoded = uint.encode(value, options);
+
+      expect(encoded.every((digit) => digit < radix)).toBe(true);
+      expect(uint.decode(encoded, options)).toBe(value);
+      expect(uint.decodeBigInt(uint.encode(BigInt(value), options), options)).toBe(BigInt(value));
+    }
+
+    expect(list(uint.encode(radix - 1, options))).toEqual([radix - 1]);
+    expect(list(uint.encode(radix, options))).toEqual([1, 0]);
+    expect(list(uint.encode(radix, { ...options, length: 4 }))).toEqual([0, 0, 1, 0]);
+    expect(() => uint.encode(radix ** 2, { ...options, length: 2 })).toThrow(RangeError);
+
+    if (bits < 8) {
+      expect(() => uint.decode(new Uint8Array([radix]), options)).toThrow(RangeError);
+      expect(() => uint.decodeBigInt(new Uint8Array([radix]), options)).toThrow(RangeError);
+    }
+  });
+
   it("left-pads to a fixed length and rejects values that do not fit", () => {
     expect(list(uint.encode(0x41, { length: 4 }))).toEqual([0, 0, 0, 0x41]);
     expect(() => uint.encode(0, { length: 0 })).toThrow(RangeError);
@@ -92,7 +115,7 @@ describe("int", () => {
   });
 
   it("detects needlessly long encodings", () => {
-    expect(int.isMinimal(new Uint8Array())).toBe(true);
+    expect(int.isMinimal(new Uint8Array())).toBe(false);
     expect(int.isMinimal(new Uint8Array([0x00]))).toBe(true);
     expect(int.isMinimal(new Uint8Array([0x00, 0x80]))).toBe(true);
     expect(int.isMinimal(new Uint8Array([0xff, 0x7f]))).toBe(true);

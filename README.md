@@ -363,6 +363,7 @@ Behavior differences:
 - The integer codecs throw a `RangeError` for values they cannot represent. `pvutils` returned an empty buffer, and it lost precision above 2^53 (above 2^47 for negative two's complement values).
 - `base64.decode` and `base64url.decode` reject invalid text. `pvutils` decoded garbage silently and added zero bytes to unpadded input, so code that trimmed its output (for example to a power-of-two length) no longer needs to.
 - `base64url.decode` rejects `=` padding by default, which `pvutils` accepted. Pass `{ allowPadding: true }` to accept correctly padded input such as JWK values produced by tools that pad.
+- `padNumber` returned `""` when the number had more digits than `length` (`padNumber(123, 2) === ""`), while `padStart` returns the full text (`"123"`). Check the length explicitly if you relied on that width check.
 
 ## Contributing
 

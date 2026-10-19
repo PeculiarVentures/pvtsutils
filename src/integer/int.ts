@@ -58,11 +58,14 @@ export function decode(data: BufferSourceLike): number {
   return Number(value);
 }
 
-/** Checks that two's complement bytes have no redundant leading 0x00 or 0xff byte (X.690 8.3.2). */
+/**
+ * Checks that two's complement bytes are a minimal encoding: at least one byte (X.690 8.3.1)
+ * and no redundant leading 0x00 or 0xff byte (X.690 8.3.2). Empty input returns `false`.
+ */
 export function isMinimal(data: BufferSourceLike): boolean {
   const bytes = toUint8Array(data);
   if (bytes.byteLength < 2) {
-    return true;
+    return bytes.byteLength === 1;
   }
   const redundantZero = bytes[0] === 0x00 && (bytes[1] & 0x80) === 0;
   const redundantOnes = bytes[0] === 0xff && (bytes[1] & 0x80) !== 0;

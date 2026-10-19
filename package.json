@@ -1,7 +1,7 @@
 {
   "name": "@peculiar/utils",
   "version": "4.0.1",
-  "description": "Modern byte, encoding, converter registry, and PEM utilities for TypeScript projects.",
+  "description": "Modern byte, encoding, integer, converter registry, and PEM utilities for TypeScript projects.",
   "type": "module",
   "sideEffects": false,
   "main": "./build/index.js",
@@ -12,6 +12,7 @@
     "./bytes": "./build/bytes.js",
     "./converters": "./build/converters.js",
     "./encoding": "./build/encoding.js",
+    "./integer": "./build/integer.js",
     "./legacy": "./build/legacy.js",
     "./pem": "./build/pem.js",
     "./package.json": "./package.json"

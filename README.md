@@ -44,6 +44,7 @@ The public API is unchanged; only packaging and runtime requirements changed.
 ```ts
 import { bytes } from "@peculiar/utils";
 import { hex, base64, base64url } from "@peculiar/utils/encoding";
+import { int, uint } from "@peculiar/utils/integer";
 import { pem } from "@peculiar/utils/pem";
 import { convert, createConverterRegistry, defaultConverters } from "@peculiar/utils/converters";
 import { Convert } from "@peculiar/utils/legacy";
@@ -156,6 +157,28 @@ const hexText = convert.transcode(pemText, {
 ```
 
 There is intentionally no chain API.
+
+## Integer Codecs
+
+`@peculiar/utils/integer` converts integers to and from big-endian bytes. Both codecs accept `number` or `bigint`; `decode` returns a `number` and throws a `RangeError` outside the safe integer range, while `decodeBigInt` has no limit.
+
+```ts
+import { int, uint } from "@peculiar/utils/integer";
+
+uint.encode(0x010203); // Uint8Array [1, 2, 3]
+uint.encode(0x41, { length: 4 }); // Uint8Array [0, 0, 0, 65]
+uint.encode(113549, { bitsPerByte: 7 }); // base-128 digits: Uint8Array [6, 119, 13]
+uint.decode(new Uint8Array([6, 119, 13]), { bitsPerByte: 7 }); // 113549
+uint.decodeBigInt(new Uint8Array([1, 0, 0, 0, 0, 0, 0, 0, 1])); // 18446744073709551617n
+
+int.encode(128); // two's complement: Uint8Array [0, 128]
+int.encode(-129); // Uint8Array [255, 127]
+int.encode(-2, { length: 3 }); // sign-extended: Uint8Array [255, 255, 254]
+int.decode(new Uint8Array([255, 127])); // -129
+int.isMinimal(new Uint8Array([0, 127])); // false: redundant leading 0x00
+```
+
+`bitsPerByte: 7` produces the raw base-128 digits only. Set the continuation bits yourself when you need an ASN.1 OID arc or tag number.
 
 ## Hex Formatting
 
@@ -314,6 +337,33 @@ import { BufferSourceConverter, Convert, assign, combine, isEqual } from "@pecul
 ```
 
 Unlike the lenient `utf8` codec, the legacy UTF-8 helpers (`ToUtf8String`, `FromUtf8String`, and `ToString`/`FromString` with `"utf8"`) are strict, as in `pvtsutils` 1.x: malformed bytes and lone surrogates throw instead of being replaced with U+FFFD, and a leading BOM is preserved. The error is a `TypeError` (`pvtsutils` threw `URIError`).
+
+## Migrating From `pvutils`
+
+`pvutils` is superseded by this package. It has no compatibility layer; use the replacements below.
+
+| `pvutils`                                        | Replacement                                                                        |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `utilToBase(value, base, reserved)`              | `uint.encode(value, { bitsPerByte: base, length: reserved })`                      |
+| `utilFromBase(data, base)`                       | `uint.decode(data, { bitsPerByte: base })` or `uint.decodeBigInt(...)`             |
+| `utilEncodeTC(value)`                            | `int.encode(value)`                                                                |
+| `utilDecodeTC.call(block)`                       | `int.decode(block.valueHex)`; `int.isMinimal(...)` for the "Needlessly long" check |
+| `isEqualBuffer(a, b)`                            | `bytes.equal(a, b)`                                                                |
+| `utilConcatBuf(...)` / `utilConcatView(...)`     | `bytes.concat(...)` / `bytes.concatToUint8Array([...])`                            |
+| `bufferToHexCodes(data)`                         | `hex.encode(data, { case: "upper" })`                                              |
+| `toBase64(arrayBufferToString(data), url, ...)`  | `base64.encode(data)` / `base64url.encode(data)`                                   |
+| `stringToArrayBuffer(fromBase64(text, url))`     | `base64.decode(text)` / `base64url.decode(text)`                                   |
+| `arrayBufferToString` / `stringToArrayBuffer`    | `binary.encode` / `binary.decode`                                                  |
+| `padNumber(value, length)`                       | `String(value).padStart(length, "0")`                                              |
+| `getParametersValue(params, name, defaultValue)` | `params[name] ?? defaultValue`                                                     |
+| `clearProps(object, names)`                      | `delete object[name]`                                                              |
+
+Behavior differences:
+
+- The integer codecs throw a `RangeError` for values they cannot represent. `pvutils` returned an empty buffer, and it lost precision above 2^53 (above 2^47 for negative two's complement values).
+- `base64.decode` and `base64url.decode` reject invalid text. `pvutils` decoded garbage silently and added zero bytes to unpadded input, so code that trimmed its output (for example to a power-of-two length) no longer needs to.
+- `base64url.decode` rejects `=` padding by default, which `pvutils` accepted. Pass `{ allowPadding: true }` to accept correctly padded input such as JWK values produced by tools that pad.
+- `padNumber` returned `""` when the number had more digits than `length` (`padNumber(123, 2) === ""`), while `padStart` returns the full text (`"123"`). Check the length explicitly if you relied on that width check.
 
 ## Contributing
 

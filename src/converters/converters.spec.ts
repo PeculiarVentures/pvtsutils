@@ -101,6 +101,8 @@ describe("converters", () => {
     expect(convert.formatString(" aGk=\n")).toBe("aGk=");
     expect(Array.from(convert.decode("pem", pemText, { label: "DATA" }))).toEqual([104, 105]);
     expect(Array.from(convert.from("pem", pemText, { label: "DATA" }))).toEqual([104, 105]);
+    expect(Array.from(convert.decode("base64url", "aGk=", { allowPadding: true }))).toEqual([104, 105]);
+    expect(convert.tryDecode("base64url", "aGk=").ok).toBe(false);
   });
 
   it("supports normalize, parse, format, transcode, tryDecode, and detect", () => {

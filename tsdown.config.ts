@@ -6,6 +6,7 @@ export default defineConfig({
     converters: "src/converters/index.ts",
     bytes: "src/bytes/index.ts",
     encoding: "src/encoding/index.ts",
+    integer: "src/integer/index.ts",
     pem: "src/pem/index.ts",
     legacy: "src/legacy/index.ts",
   },

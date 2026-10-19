@@ -70,6 +70,24 @@ describe("encoding", () => {
     expect(() => encoding.base64url.decode("aGk+")).toThrow(TypeError);
   });
 
+  it("accepts padded base64url text when allowPadding is set", () => {
+    const options = { allowPadding: true };
+
+    expect(() => encoding.base64url.decode("aGk=")).toThrow(TypeError);
+    expect(encoding.base64url.is("aGk=", options)).toBe(true);
+    expect(encoding.base64url.is("aGk", options)).toBe(true);
+    expect(Array.from(encoding.base64url.decode("aGk=", options))).toEqual([104, 105]);
+    expect(Array.from(encoding.base64url.decode("-_8=", options))).toEqual([251, 255]);
+    expect(Array.from(encoding.base64url.decode("aA==", options))).toEqual([104]);
+    expect(Array.from(encoding.base64url.decode(" aA= =\n", options))).toEqual([104]);
+    expect(Array.from(encoding.base64url.decode("aGk", options))).toEqual([104, 105]);
+
+    for (const invalid of ["aGk==", "aA=", "a===", "=", "aG=k", "aGk+="]) {
+      expect(encoding.base64url.is(invalid, options)).toBe(false);
+      expect(() => encoding.base64url.decode(invalid, options)).toThrow(TypeError);
+    }
+  });
+
   it("handles hexadecimal helpers", () => {
     const payload = new Uint8Array([0, 15, 16, 255]);
 

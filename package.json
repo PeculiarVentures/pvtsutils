@@ -1,6 +1,6 @@
 {
   "name": "@peculiar/utils",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Modern byte, encoding, integer, converter registry, and PEM utilities for TypeScript projects.",
   "type": "module",
   "sideEffects": false,

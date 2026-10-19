@@ -313,6 +313,8 @@ The old `pvtsutils`-style surface is preserved under the legacy entry point.
 import { BufferSourceConverter, Convert, assign, combine, isEqual } from "@peculiar/utils/legacy";
 ```
 
+Unlike the lenient `utf8` codec, the legacy UTF-8 helpers (`ToUtf8String`, `FromUtf8String`, and `ToString`/`FromString` with `"utf8"`) are strict, as in `pvtsutils` 1.x: malformed bytes and lone surrogates throw instead of being replaced with U+FFFD, and a leading BOM is preserved. The error is a `TypeError` (`pvtsutils` threw `URIError`).
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the development setup, required checks, and release process.

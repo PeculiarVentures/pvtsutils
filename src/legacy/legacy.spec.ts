@@ -50,6 +50,36 @@ describe("legacy", () => {
     expect(Convert.formatString(" aGk=\n")).toBe("aGk=");
   });
 
+  it("decodes UTF-8 strictly like pvtsutils 1.x", () => {
+    for (const bytes of [
+      [0x41, 0xff, 0xc3], // invalid byte
+      [0xe2, 0x82], // truncated sequence
+      [0xc0, 0x80], // overlong encoding
+      [0xed, 0xa0, 0x80], // encoded surrogate
+    ]) {
+      expect(() => Convert.ToUtf8String(Uint8Array.from(bytes))).toThrow(TypeError);
+      expect(() => Convert.ToString(Uint8Array.from(bytes))).toThrow(TypeError);
+      expect(() => Convert.ToString(Uint8Array.from(bytes), "utf-8")).toThrow(TypeError);
+    }
+
+    const withBom = Uint8Array.of(0xef, 0xbb, 0xbf, 0x41);
+    expect(Convert.ToUtf8String(withBom)).toBe("﻿A");
+    expect(Convert.ToString(withBom)).toBe("﻿A");
+    expect(Convert.ToUtf8String(Uint8Array.of(0xf0, 0x9f, 0x98, 0x80))).toBe("😀");
+  });
+
+  it("encodes UTF-8 strictly like pvtsutils 1.x", () => {
+    for (const text of ["\ud800", "A\udc00", "\udc00\ud800", "A\ud800B"]) {
+      expect(() => Convert.FromUtf8String(text)).toThrow(TypeError);
+      expect(() => Convert.FromString(text)).toThrow(TypeError);
+      expect(() => Convert.FromString(text, "utf-8")).toThrow(TypeError);
+    }
+
+    expect(Array.from(new Uint8Array(Convert.FromUtf8String("😀")))).toEqual([0xf0, 0x9f, 0x98, 0x80]);
+    expect(Array.from(new Uint8Array(Convert.FromUtf8String("﻿A")))).toEqual([0xef, 0xbb, 0xbf, 0x41]);
+    expect(Array.from(new Uint8Array(Convert.FromUtf8String("")))).toEqual([]);
+  });
+
   it("exposes the buffer source converter facade", () => {
     const buffer = new Uint8Array([1, 2, 3, 4]);
 

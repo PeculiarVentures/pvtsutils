@@ -1,4 +1,12 @@
-import type { BufferSourceLike } from "../bytes/index.js";
+declare const TextEncoder: new () => { encode(text: string): Uint8Array };
+declare const TextDecoder: new (
+  label?: string,
+  options?: { fatal?: boolean; ignoreBOM?: boolean },
+) => {
+  decode(data: Uint8Array): string;
+};
+
+import { toArrayBuffer, toUint8Array, type BufferSourceLike } from "../bytes/index.js";
 import { convert, type BufferEncoding } from "../converters/index.js";
 import type { Utf16Options } from "../encoding/utf16.js";
 
@@ -7,6 +15,33 @@ export type TextEncoding = "ascii" | "utf8" | "utf16" | "utf16be" | "utf16le" | 
 
 function normalizeTextEncoding(encoding: TextEncoding): BufferEncoding {
   return encoding === "ascii" ? "binary" : encoding;
+}
+
+function isUtf8Encoding(encoding: BufferEncoding): boolean {
+  const name = encoding.toLowerCase();
+  return name === "utf8" || name === "utf-8";
+}
+
+/** Matches lone surrogates; well-formed pairs are a single code point in `u` mode. */
+const LONE_SURROGATE = /\p{Cs}/u;
+
+/**
+ * Strict UTF-8 encoder matching `pvtsutils` 1.x: throws on lone surrogates
+ * instead of replacing them with U+FFFD.
+ */
+function encodeUtf8Strict(text: string): ArrayBufferLike {
+  if (LONE_SURROGATE.test(text)) {
+    throw new TypeError("The string contains lone surrogates and cannot be encoded as UTF-8");
+  }
+  return toArrayBuffer(new TextEncoder().encode(text));
+}
+
+/**
+ * Strict UTF-8 decoder matching `pvtsutils` 1.x: throws on malformed input
+ * and keeps a leading BOM.
+ */
+function decodeUtf8Strict(data: BufferSourceLike): string {
+  return new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(toUint8Array(data));
 }
 
 /**
@@ -34,6 +69,9 @@ export class Convert {
 
   /** Converts buffer data to text. */
   public static ToString(buffer: BufferSourceLike, enc: BufferEncoding = "utf8"): string {
+    if (isUtf8Encoding(enc)) {
+      return decodeUtf8Strict(buffer);
+    }
     return convert.toString(buffer, enc);
   }
 
@@ -41,6 +79,9 @@ export class Convert {
   public static FromString(str: string, enc: BufferEncoding = "utf8"): ArrayBufferLike {
     if (!str) {
       return new ArrayBuffer(0);
+    }
+    if (isUtf8Encoding(enc)) {
+      return encodeUtf8Strict(str);
     }
     return convert.fromString(str, enc);
   }
@@ -65,13 +106,25 @@ export class Convert {
     return convert.toBase64Url(data);
   }
 
-  /** Converts UTF-8 or UTF-16 text to bytes. */
+  /**
+   * Converts UTF-8 or UTF-16 text to bytes.
+   * @throws {TypeError} When UTF-8 is requested and the text contains lone surrogates.
+   */
   public static FromUtf8String(text: string, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): ArrayBufferLike {
+    if (encoding === "utf8") {
+      return encodeUtf8Strict(text);
+    }
     return convert.fromString(text, normalizeTextEncoding(encoding));
   }
 
-  /** Converts bytes to UTF-8 or UTF-16 text. */
+  /**
+   * Converts bytes to UTF-8 or UTF-16 text. A leading UTF-8 BOM is preserved.
+   * @throws {TypeError} When UTF-8 is requested and the bytes are not valid UTF-8.
+   */
   public static ToUtf8String(buffer: BufferSourceLike, encoding: TextEncoding = Convert.DEFAULT_UTF8_ENCODING): string {
+    if (encoding === "utf8") {
+      return decodeUtf8Strict(buffer);
+    }
     return convert.toString(buffer, normalizeTextEncoding(encoding));
   }
 

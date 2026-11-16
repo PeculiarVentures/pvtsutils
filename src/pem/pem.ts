@@ -4,7 +4,6 @@ import type { ParsedBytes, Converter } from "../converters/types.js";
 import type { PemBlock, PemDecodeOptions, PemEncodeBlock, PemEncodeOptions, PemFormat } from "./types.js";
 
 const LABEL_REGEX = /^[A-Z0-9][A-Z0-9 ._-]*[A-Z0-9]$/i;
-const PEM_BLOCK_REGEX = /-----BEGIN ([^-]+)-----([\s\S]*?)-----END \1-----/g;
 
 interface ParsedPemBody {
   headers?: Record<string, string>;
@@ -65,21 +64,54 @@ function collectBlocks(text: string, options: PemDecodeOptions = {}): MatchedPem
   const requestedLabel = options.label;
   let match: RegExpExecArray | null;
 
-  PEM_BLOCK_REGEX.lastIndex = 0;
-  while ((match = PEM_BLOCK_REGEX.exec(text))) {
-    const label = match[1].trim();
+  // Index END markers once instead of searching the remaining body for every BEGIN.
+  const endings = new Map<string, { offsets: number[]; next: number }>();
+  // Look ahead at the closing dashes so markers sharing those dashes are still found.
+  const endPattern = /-----END ([^-]+)(?=-----)/g;
+  while ((match = endPattern.exec(text))) {
+    const rawLabel = match[1];
+    let ending = endings.get(rawLabel);
+    if (!ending) {
+      ending = { offsets: [], next: 0 };
+      endings.set(rawLabel, ending);
+    }
+    ending.offsets.push(match.index);
+  }
+
+  const beginPattern = /-----BEGIN ([^-]+)(?=-----)/g;
+  while ((match = beginPattern.exec(text))) {
+    const rawLabel = match[1];
+    const ending = endings.get(rawLabel);
+    if (!ending) {
+      continue;
+    }
+
+    const bodyStart = beginPattern.lastIndex + 5;
+    // Each END offset is visited at most once as BEGIN positions advance.
+    while (ending.next < ending.offsets.length && ending.offsets[ending.next] < bodyStart) {
+      ending.next++;
+    }
+    const bodyEnd = ending.offsets[ending.next];
+    if (bodyEnd === undefined) {
+      continue;
+    }
+    ending.next++;
+    const blockEnd = bodyEnd + `-----END ${rawLabel}-----`.length;
+    beginPattern.lastIndex = blockEnd;
+
+    const label = rawLabel.trim();
     if (requestedLabel && label !== requestedLabel) {
       continue;
     }
 
     assertLabel(label);
-    const parsed = parseBody(match[2]);
+    const parsed = parseBody(text.slice(bodyStart, bodyEnd));
     blocks.push({
       label,
       data: base64.decode(parsed.base64Text),
       headers: parsed.headers,
       lineLength: parsed.base64Lines[0]?.length ?? 64,
-      newline: detectNewline(match[0]),
+      newline: detectNewline(text.slice(match.index, blockEnd)),
     });
   }
 
